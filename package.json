@@ -1,0 +1,9 @@
+{
+  "name": "os-scan",
+  "repository": "git@github.com:opensquare-network/os-scan.git",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "license": "Apache 2.0"
+}
