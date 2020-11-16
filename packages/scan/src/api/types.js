@@ -1,17 +1,17 @@
 module.exports = {
+  "Address": "AccountId",
+  "LookupSource": "AccountId",
+  "Amount": "i128",
+  "CurrencyIdOf": "CurrencyId",
+  "OracleKey": "CurrencyId",
   "CurrencyId": {
     "_enum": [
-      "Native",
+      "OSN",
       "USDT",
       "AUSD",
       "DOT"
     ]
   },
-  "OracleKey": "CurrencyId",
-  "Address": "AccountId",
-  "LookupSource": "AccountId",
-  "Amount": "i128",
-  "CurrencyIdOf": "CurrencyId",
   "Price": "FixedU128",
   "SdDigest": "H256",
   "BountyId": "H256",
@@ -37,8 +37,9 @@ module.exports = {
   },
   "BountyMetaData": {
     "owner": "AccountId",
-    "currencyId": "CurrencyId",
+    "currency_id": "CurrencyId",
     "payment": "Balance",
+    "title": "Vec<u8>",
     "digest": "SdDigest"
   },
   "Bounty": {

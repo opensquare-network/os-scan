@@ -8,9 +8,7 @@ const { updateHeight } = require('./chain/latestHead')
 
 async function main() {
   const api = await getApi()
-
   await updateHeight()
-
   let scanHeight = await getFirstScanHeight()
 
   while (true) {
@@ -31,7 +29,7 @@ async function main() {
     }
 
     if (!blockHash) {
-      // Should no happen
+      // Expect not happen
       await sleep(1000)
       continue
     }
