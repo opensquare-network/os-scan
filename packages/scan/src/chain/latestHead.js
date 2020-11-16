@@ -12,7 +12,6 @@ async function updateHeight() {
 
   unsubscribeNewHead = await api.rpc.chain.subscribeNewHeads(header => {
     latestHeight = header.number.toNumber()
-    console.log('latestHeight', latestHeight)
   })
 }
 

@@ -1,10 +1,7 @@
-const { getApi } = require("../api");
 const extractBlockTime = require('./extractBlockTime')
 const { getBlockCollection } = require("../mongo");
 
-async function handleBlock(blockHash) {
-  const api = await getApi()
-  const block = await api.rpc.chain.getBlock(blockHash)
+async function handleBlock(block) {
   // TODO: extract author from the block info
   // const author = extractAuthor(validators, block.block.header)
 
