@@ -143,7 +143,7 @@
     tweetnacl "^1.0.3"
     xxhashjs "^0.2.2"
 
-"@polkadot/util@4.1.1", "@polkadot/util@^4.0.1":
+"@polkadot/util@4.1.1", "@polkadot/util@^4.0.1", "@polkadot/util@^4.1.1":
   version "4.1.1"
   resolved "https://registry.npm.taobao.org/@polkadot/util/download/@polkadot/util-4.1.1.tgz#76668d5f0e00c396d6b6f4ba652348d287ad49c2"
   integrity sha1-dmaNXw4Aw5bWtvS6ZSNI0oetScI=
@@ -238,6 +238,11 @@ base-x@^3.0.8:
   integrity sha512-Rl/1AWP4J/zRrk54hhlxH4drNxPJXYUaKffODVI53/dAsV4t9fBxyxYKAVPU1XBHxYwOWP9h9H0hM2MVw4YfJA==
   dependencies:
     safe-buffer "^5.0.1"
+
+bignumber.js@^9.0.1:
+  version "9.0.1"
+  resolved "https://registry.npm.taobao.org/bignumber.js/download/bignumber.js-9.0.1.tgz#8d7ba124c882bfd8e43260c67475518d0689e4e5"
+  integrity sha1-jXuhJMiCv9jkMmDGdHVRjQaJ5OU=
 
 bl@^2.2.1:
   version "2.2.1"

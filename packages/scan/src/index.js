@@ -1,3 +1,6 @@
+const { handleExtrinsics } = require("./extrinsic");
+const { handleEvents } = require("./events");
+const { getBlockIndexer } = require("./block/getBlockIndexer");
 const { deleteDataFrom } = require("./rollback");
 const { findNonForkHeight } = require("./rollback");
 const { handleBlock } = require("./block");
@@ -14,6 +17,7 @@ async function main() {
   const api = await getApi()
   await updateHeight()
   let scanHeight = await getFirstScanHeight()
+  await deleteDataFrom(scanHeight)
 
   while (true) {
     const chainHeight = getLatestHeight()
@@ -54,8 +58,12 @@ async function main() {
 
     await handleBlock(block)
     preBlockHash = block.block.hash.toHex()
-    const num = block.block.header.number.toNumber()
-    console.log(`block ${num} is saved to db`)
+    console.log(`block ${(block.block.header.number.toNumber())} is saved to db`)
+
+    const blockIndexer = getBlockIndexer(block.block)
+    const allEvents = await api.query.system.events.at(blockHash)
+    await handleEvents(allEvents, blockIndexer, block.block.extrinsics)
+    await handleExtrinsics(block.block.extrinsics, allEvents, blockIndexer)
 
     await updateScanHeight(scanHeight++)
   }

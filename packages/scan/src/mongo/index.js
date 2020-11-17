@@ -4,12 +4,16 @@ const dbName = 'os-scan'
 
 const blockCollectionName = 'block'
 const statusCollectionName = 'status'
+const eventCollectionName = 'event'
+const extrinsicCollectionName = 'extrinsic'
 
 let client = null
 let db = null
 
 let blockCol = null
 let statusCol = null
+let eventCol = null
+let extrinsicCol = null
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost:27017'
 
@@ -22,6 +26,8 @@ async function initDb() {
 
   blockCol = db.collection(blockCollectionName)
   statusCol = db.collection(statusCollectionName)
+  eventCol = db.collection(eventCollectionName)
+  extrinsicCol = db.collection(extrinsicCollectionName)
 
   await _createIndexes()
 }
@@ -51,7 +57,19 @@ async function getStatusCollection() {
   return statusCol
 }
 
+async function getExtrinsicCollection() {
+  await tryInit(extrinsicCol)
+  return extrinsicCol
+}
+
+async function getEventCollection() {
+  await tryInit(eventCol)
+  return eventCol
+}
+
 module.exports = {
   getBlockCollection,
-  getStatusCollection
+  getStatusCollection,
+  getExtrinsicCollection,
+  getEventCollection
 }
