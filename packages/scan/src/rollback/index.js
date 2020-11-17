@@ -1,3 +1,6 @@
+const { getEventCollection } = require("../mongo");
+const { getExtrinsicCollection } = require("../mongo");
+const { getBountyHuntersCollection } = require("../mongo");
 const { getBountyStateCollection } = require("../mongo");
 const { getBountyCollection } = require("../mongo");
 const { getBlockCollection } = require("../mongo");
@@ -24,8 +27,21 @@ async function deleteDataFrom(blockHeight) {
   const blockCol = await getBlockCollection()
   await blockCol.deleteMany({ 'header.number': { $gte: blockHeight } })
 
+  await deleteExtrinsicsFrom(blockHeight)
+  await deleteEventsFrom(blockHeight)
   await deleteBountiesFrom(blockHeight)
   await deleteBountyStateFrom(blockHeight)
+  await deleteBountyHuntersFrom(blockHeight)
+}
+
+async function deleteExtrinsicsFrom(blockHeight) {
+  const col = await getExtrinsicCollection()
+  await col.deleteMany({ 'indexer.blockHeight': { $gte: blockHeight } })
+}
+
+async function deleteEventsFrom(blockHeight) {
+  const col = await getEventCollection()
+  await col.deleteMany({ 'indexer.blockHeight': { $gte: blockHeight } })
 }
 
 async function deleteBountiesFrom(blockHeight) {
@@ -36,6 +52,11 @@ async function deleteBountiesFrom(blockHeight) {
 async function deleteBountyStateFrom(blockHeight) {
   const bountyStateCol = await getBountyStateCollection()
   await bountyStateCol.deleteMany({ blockHeight: { $gte: blockHeight } })
+}
+
+async function deleteBountyHuntersFrom(blockHeight) {
+  const bountyHuntersCol = await getBountyHuntersCollection()
+  await bountyHuntersCol.deleteMany({ blockHeight: { $gte: blockHeight } })
 }
 
 module.exports = {

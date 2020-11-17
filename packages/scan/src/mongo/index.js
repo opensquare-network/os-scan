@@ -8,6 +8,7 @@ const eventCollectionName = 'event'
 const extrinsicCollectionName = 'extrinsic'
 const bountyCollectionName = 'bounty'
 const bountyStateCollectionName = 'bountyState'
+const bountyHuntersCollectionName = 'bountyHunters'
 
 let client = null
 let db = null
@@ -18,6 +19,7 @@ let eventCol = null
 let extrinsicCol = null
 let bountyCol = null
 let bountyStateCol = null
+let bountyHuntersCol = null
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost:27017'
 
@@ -34,6 +36,7 @@ async function initDb() {
   extrinsicCol = db.collection(extrinsicCollectionName)
   bountyCol = db.collection(bountyCollectionName)
   bountyStateCol = db.collection(bountyStateCollectionName)
+  bountyHuntersCol = db.collection(bountyHuntersCollectionName)
 
   await _createIndexes()
 }
@@ -83,11 +86,17 @@ async function getBountyStateCollection() {
   return bountyStateCol
 }
 
+async function getBountyHuntersCollection() {
+  await tryInit(bountyHuntersCol)
+  return bountyHuntersCol
+}
+
 module.exports = {
   getBlockCollection,
   getStatusCollection,
   getExtrinsicCollection,
   getEventCollection,
   getBountyCollection,
-  getBountyStateCollection
+  getBountyStateCollection,
+  getBountyHuntersCollection
 }

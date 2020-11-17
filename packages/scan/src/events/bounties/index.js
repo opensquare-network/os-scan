@@ -1,3 +1,5 @@
+const { handleCancelHuntBounty } = require("./bountyHunters");
+const { handleHuntBounty } = require("./bountyHunters");
 const { safeBlocks } = require("../../utils/consants");
 const { getBountyStateCollection } = require("../../mongo");
 const { getApi } = require("../../api");
@@ -10,7 +12,6 @@ function isStateChange(method) {
     'Reject',
     'Close',
     'ForceClosed',
-    'HuntBounty',
     'AssignBounty',
     'Submit',
     'Resign',
@@ -22,8 +23,14 @@ async function handleBountiesEvent(event, indexer) {
   const { method, data } = event
   const jsonData = data.toJSON()
 
+  // TODO: handle one business events in one block, maybe we have to add the phase of the event to db.
+
   if ('ApplyBounty' === method) {
     await saveNewBounty(jsonData, indexer)
+  } else if ('HuntBounty' === method) {
+    await handleHuntBounty(jsonData, indexer)
+  } else if ('CancelHuntBounty' === method) {
+    await handleCancelHuntBounty(jsonData, indexer)
   }
 
   if (isStateChange(method)) {
@@ -61,6 +68,7 @@ async function saveBountyState(method, json, indexer) {
     data: json
   })
 
+  // TODO: handle same business record in one height
   const records = await bountyStateCol
     .find({
       bountyId,
