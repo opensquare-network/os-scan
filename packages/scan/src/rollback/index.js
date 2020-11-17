@@ -1,3 +1,4 @@
+const { getBountyCollection } = require("../mongo");
 const { getBlockCollection } = require("../mongo");
 const { getApi } = require("../api");
 
@@ -21,6 +22,13 @@ async function findNonForkHeight(nowHeight) {
 async function deleteDataFrom(blockHeight) {
   const blockCol = await getBlockCollection()
   await blockCol.deleteMany({ 'header.number': { $gte: blockHeight } })
+
+  await deleteBountiesFrom(blockHeight)
+}
+
+async function deleteBountiesFrom(blockHeight) {
+  const bountyCol = await getBountyCollection()
+  await bountyCol.deleteMany({ 'indexer.blockHeight': { $gte: blockHeight } })
 }
 
 module.exports = {

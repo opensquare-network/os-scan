@@ -6,6 +6,7 @@ const blockCollectionName = 'block'
 const statusCollectionName = 'status'
 const eventCollectionName = 'event'
 const extrinsicCollectionName = 'extrinsic'
+const bountyCollectionName = 'bounty'
 
 let client = null
 let db = null
@@ -14,6 +15,7 @@ let blockCol = null
 let statusCol = null
 let eventCol = null
 let extrinsicCol = null
+let bountyCol = null
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost:27017'
 
@@ -28,6 +30,7 @@ async function initDb() {
   statusCol = db.collection(statusCollectionName)
   eventCol = db.collection(eventCollectionName)
   extrinsicCol = db.collection(extrinsicCollectionName)
+  bountyCol = db.collection(bountyCollectionName)
 
   await _createIndexes()
 }
@@ -67,9 +70,15 @@ async function getEventCollection() {
   return eventCol
 }
 
+async function getBountyCollection() {
+  await tryInit(bountyCol)
+  return bountyCol
+}
+
 module.exports = {
   getBlockCollection,
   getStatusCollection,
   getExtrinsicCollection,
-  getEventCollection
+  getEventCollection,
+  getBountyCollection
 }
