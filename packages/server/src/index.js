@@ -5,20 +5,27 @@ const helmet = require('koa-helmet')
 const http = require('http')
 const cors = require('@koa/cors')
 const config = require('../config')
+const { listenAndEmitInfo } = require("./io");
 const { initDb } = require("./mongo");
-
 const app = new Koa()
 
-app
-  .use(logger())
-  .use(bodyParser())
-  .use(cors())
-  .use(helmet())
+app.use(cors());
+app.use(logger());
+app.use(bodyParser());
+app.use(helmet());
 
 require('./routes')(app)
 const server = http.createServer(app.callback())
+const io = require('socket.io')(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+})
 
-initDb().then((db) => {
+initDb().then(async (db) => {
+  await listenAndEmitInfo(io)
+
   app.context.db = db
   const port = config.server.port || 3213
 

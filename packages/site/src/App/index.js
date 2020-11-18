@@ -4,6 +4,7 @@ import Home from "@pages/Home";
 import styled from "styled-components"
 import Header from "@pages/Header";
 import Footer from "@pages/Footer";
+import "@services/socket"
 
 export const Wrapper = styled.div`
   min-height: calc(100vh - 108px);
