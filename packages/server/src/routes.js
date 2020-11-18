@@ -1,5 +1,7 @@
 const featureRouters = [
   require('./features/blocks/routes'),
+  require('./features/extrinsics/routes'),
+  require('./features/events/routes'),
 ]
 
 module.exports = app => {
