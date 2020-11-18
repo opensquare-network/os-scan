@@ -1,12 +1,13 @@
 {
-  "name": "scan",
+  "name": "@opensquare/scan-scripts",
   "version": "1.0.0",
+  "private": true,
   "license": "Apache 2.0",
   "dependencies": {
     "@polkadot/api": "^2.6.1",
     "@polkadot/util": "^4.1.1",
     "bignumber.js": "^9.0.1",
-    "mongodb": "^3.6.2"
+    "mongodb": "^3.6.3"
   },
   "devDependencies": {
     "@types/mongodb": "^3.5.33"
