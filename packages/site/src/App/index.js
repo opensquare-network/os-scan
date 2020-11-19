@@ -5,9 +5,20 @@ import styled from "styled-components"
 import Header from "@pages/Header";
 import Footer from "@pages/Footer";
 import "@services/socket"
+import BlockChain from "@pages/BlockChain";
+import Bounties from "@pages/Bounties";
 
 export const Wrapper = styled.div`
   min-height: calc(100vh - 108px);
+  
+    @media screen and (min-width: 1140px) {
+      width: 1128px;
+      margin: 0 auto;
+    }
+    
+    @media screen and (max-width: 1140px) {
+      width: 100%;
+    }
 `;
 
 function App() {
@@ -17,6 +28,8 @@ function App() {
       <Wrapper>
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route exact path="/blockchain" component={BlockChain} />
+          <Route exact path="/bounties" component={Bounties} />
           <Redirect to="/" />
         </Switch>
       </Wrapper>
