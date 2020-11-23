@@ -7,6 +7,8 @@ import Footer from "@pages/Footer";
 import "@services/socket"
 import BlockChain from "@pages/BlockChain";
 import Bounties from "@pages/Bounties";
+import BlockDetail from "@pages/BlockDetail";
+import AccountDetail from "@pages/AccountDetail";
 
 export const Wrapper = styled.div`
   min-height: calc(100vh - 108px);
@@ -30,6 +32,8 @@ function App() {
           <Route exact path="/" component={Home} />
           <Route exact path="/blockchain" component={BlockChain} />
           <Route exact path="/bounties" component={Bounties} />
+          <Route path="/blocks/:heightOrHash" component={BlockDetail} />
+          <Route path="/accounts/:address" component={AccountDetail} />
           <Redirect to="/" />
         </Switch>
       </Wrapper>
