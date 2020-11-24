@@ -54,7 +54,14 @@ export default function Header() {
           </NavLink>
         </li>
         <li>
-          <NavLink exact activeClassName="active" to="/blockchain">
+          <NavLink
+            exact
+            activeClassName="active"
+            to="/blocks"
+            isActive={(match, location) => {
+              return ['/blocks', '/extrinsics'].includes(location.pathname)
+            }}
+          >
             Blockchain
           </NavLink>
         </li>

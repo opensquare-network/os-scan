@@ -7,11 +7,21 @@ import Spinner from "@components/Spinner";
 import BlockLink from "@components/BlockLink";
 import TimeGap from "@components/TimeGap";
 import Table from "@pages/Home/Table";
-
-const header = <Title>Latest Blocks</Title>
+import { Icon } from "semantic-ui-react";
+import HeaderWrapper from "@pages/Home/HeaderWrapper";
+import { useHistory } from "react-router";
 
 export default function LatestBlocks() {
   const blocks = useSelector(latestBlocksSelector)
+  const history = useHistory()
+
+  const header =
+    <HeaderWrapper>
+      <Title>Latest Blocks</Title>
+      <Icon name="angle double right" onClick={() => {
+        history.push('/blocks')
+      }} />
+    </HeaderWrapper>
 
   let body = (
     <tr style={{ height: 222, background: '#fff' }}>

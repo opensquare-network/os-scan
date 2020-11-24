@@ -2,12 +2,8 @@ import React from "react";
 import toPrecision from "../utils/toPrecision";
 
 export default function TimeGap({ timestamp }) {
-  console.log(timestamp)
-
   const now = Date.now()
   const gapSeconds = (now - timestamp) / 1000
-
-  console.log('gapSeconds', gapSeconds)
 
   if (gapSeconds < 120) {
     return <span>{gapSeconds} secs ago</span>

@@ -7,11 +7,21 @@ import TitleCard from "@components/TitleCard";
 import Table from "@pages/Home/Table";
 import TimeGap from "@components/TimeGap";
 import { TxLink } from "@components/index";
-
-const header = <Title>Important Extrinsics</Title>
+import HeaderWrapper from "@pages/Home/HeaderWrapper";
+import { Icon } from "semantic-ui-react";
+import { useHistory } from "react-router";
 
 export default function LatestImportantExtrinsics() {
   const extrinsics = useSelector(latestExtrinsicsSelector)
+  const history = useHistory()
+
+  const header =
+    <HeaderWrapper>
+      <Title>Important Extrinsics</Title>
+      <Icon name="angle double right" onClick={() => {
+        history.push('/extrinsics')
+      }} />
+    </HeaderWrapper>
 
   let body = (
     <tr style={{ height: 222, background: '#fff' }}>
