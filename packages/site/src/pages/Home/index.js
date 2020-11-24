@@ -6,9 +6,22 @@ import LatestImportantExtrinsics from "@pages/Home/LatestImportantExtrinsics";
 const Wrapper = styled.div`
   margin: 24px 0;
   
+`
+
+const LatestInfo = styled.div`
   & > div {
-    &:not(:first-of-type) {
-      margin-top: 12px;
+    margin-top: 12px;
+  }
+
+  @media screen and (min-width: 930px) {
+    display: flex;
+    
+    & > div {
+      flex: 1;
+      
+      &:not(:first-of-type) {
+        margin-left: 16px;
+      }
     }
   }
 `
@@ -16,8 +29,10 @@ const Wrapper = styled.div`
 export default function Home() {
   return (
     <Wrapper>
-      <LatestBlocks />
-      <LatestImportantExtrinsics />
+      <LatestInfo>
+        <LatestBlocks />
+        <LatestImportantExtrinsics />
+      </LatestInfo>
     </Wrapper>
   )
 }
