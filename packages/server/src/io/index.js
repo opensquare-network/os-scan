@@ -1,3 +1,4 @@
+const { feedLatestExtrinsics } = require("./latestExtrinsic");
 const { feedLatestBlocks } = require("./latestBlock");
 const { getLatestExtrinsics } = require("./store");
 const { latestExtrinsicsRoom } = require("./constant");
@@ -23,6 +24,7 @@ async function listenAndEmitInfo(io) {
   })
 
   await feedLatestBlocks(io)
+  await feedLatestExtrinsics(io)
 }
 
 module.exports = {

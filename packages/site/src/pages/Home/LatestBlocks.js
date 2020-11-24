@@ -1,43 +1,14 @@
 import React from "react";
 import TitleCard from "@components/TitleCard";
 import Title from "@components/Title";
-import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { latestBlocksSelector } from "@store/reducers/latestBlockSlice";
 import Spinner from "@components/Spinner";
 import BlockLink from "@components/BlockLink";
 import TimeGap from "@components/TimeGap";
+import Table from "@pages/Home/Table";
 
 const header = <Title>Latest Blocks</Title>
-
-const Table = styled.table`
-  width: 100%;
-  thead {
-    tr {
-      th {
-        line-height: 1.5;
-        padding: 10px;
-        text-align: left;
-        
-        &:last-of-type {
-          text-align: right;
-        }
-      }
-    }
-  }
-  
-  tbody {
-    tr {
-      td {
-        text-align: left;
-        padding: 10px;
-        &:last-of-type {
-          text-align: right;
-        }
-      }
-    }
-  }
-`
 
 export default function LatestBlocks() {
   const blocks = useSelector(latestBlocksSelector)

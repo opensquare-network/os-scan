@@ -9,6 +9,7 @@ import BlockChain from "@pages/BlockChain";
 import Bounties from "@pages/Bounties";
 import BlockDetail from "@pages/BlockDetail";
 import AccountDetail from "@pages/AccountDetail";
+import ExtrinsicDetail from "@pages/ExtrinsicDetail";
 
 export const Wrapper = styled.div`
   min-height: calc(100vh - 108px);
@@ -33,6 +34,7 @@ function App() {
           <Route exact path="/blockchain" component={BlockChain} />
           <Route exact path="/bounties" component={Bounties} />
           <Route path="/blocks/:heightOrHash" component={BlockDetail} />
+          <Route path="/extrinsics/:index" component={ExtrinsicDetail} />
           <Route path="/accounts/:address" component={AccountDetail} />
           <Redirect to="/" />
         </Switch>
