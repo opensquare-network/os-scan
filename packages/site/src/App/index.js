@@ -12,19 +12,22 @@ import AccountDetail from "@pages/AccountDetail";
 import ExtrinsicDetail from "@pages/ExtrinsicDetail";
 import BlockList from "@pages/BlockList";
 import ExtrinsicList from "@pages/ExtrinsicList";
+import EventList from "@pages/EventList";
 
 export const Wrapper = styled.div`
-  min-height: calc(100vh - 108px);
+  min-height: calc(100vh - 140px);
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (min-width: 1140px) {
+    width: 1128px;
+    margin: 0 auto;
+  }
   
-    @media screen and (min-width: 1140px) {
-      width: 1128px;
-      margin: 0 auto;
-    }
-    
-    @media screen and (max-width: 1140px) {
-      width: 100%;
-      padding: 0 16px;
-    }
+  @media screen and (max-width: 1140px) {
+    width: 100%;
+    padding: 0 16px;
+  }
 `;
 
 function App() {
@@ -40,6 +43,7 @@ function App() {
           <Route path="/blocks" component={BlockList} />
           <Route path="/extrinsics/:index" component={ExtrinsicDetail} />
           <Route path="/extrinsics" component={ExtrinsicList} />
+          <Route path="/events" component={EventList} />
           <Route path="/accounts/:address" component={AccountDetail} />
           <Redirect to="/" />
         </Switch>

@@ -4,7 +4,6 @@ import styled from "styled-components"
 import LatestImportantExtrinsics from "@pages/Home/LatestImportantExtrinsics";
 
 const Wrapper = styled.div`
-  margin: 24px 0;
 `
 
 const LatestInfo = styled.div`

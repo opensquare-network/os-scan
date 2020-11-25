@@ -11,6 +11,7 @@ export const Wrapper = styled.header`
   align-items: center;
   padding: 0 24px;
   background: #4a4a4a;
+  margin-bottom: 16px;
   
   img {
     height: 30px;
@@ -59,7 +60,7 @@ export default function Header() {
             activeClassName="active"
             to="/blocks"
             isActive={(match, location) => {
-              return ['/blocks', '/extrinsics'].includes(location.pathname)
+              return ['/blocks', '/extrinsics', '/events'].includes(location.pathname)
             }}
           >
             Blockchain
