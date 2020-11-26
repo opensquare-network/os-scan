@@ -60,7 +60,8 @@ export default function Header() {
             activeClassName="active"
             to="/blocks"
             isActive={(match, location) => {
-              return ['/blocks', '/extrinsics', '/events'].includes(location.pathname)
+              const path = location.pathname || ''
+              return path.startsWith('/blocks') || path.startsWith('/extrinsics') || path.startsWith('/events')
             }}
           >
             Blockchain

@@ -1,15 +1,24 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import styled from "styled-components";
+import { isHex, shortHash } from "../utils";
 
-export default function BlockLink(props) {
-  const { value, hexValue, style } = props
+const Wrapper = styled(NavLink)`
+  
+`
+
+export default function BlockLink({ value, truncate = false }) {
+  let text = value
+
+  if (isHex(value) && truncate) {
+    text = shortHash(value, 6)
+  }
 
   return (
-    <NavLink
-      to={`/blocks/${hexValue || value}`}
-      style={style}
+    <Wrapper
+      to={`/blocks/${value}`}
     >
-      {value}
-    </NavLink>
+      {text}
+    </Wrapper>
   )
 }

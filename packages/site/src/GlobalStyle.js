@@ -36,6 +36,17 @@ const GlobalStyle = createGlobalStyle`
   .ui.input.error>input:focus {
     border-color: #EC4730;;
   }
+  
+  .ant-table.ant-table-small {
+    font-size: 13px;
+  }
+  
+  a {
+    color: #4183c4;
+    &:hover {
+      color: #40a9ff;
+    }
+  }
 `;
 
 export default GlobalStyle
