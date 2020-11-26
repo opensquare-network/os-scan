@@ -13,6 +13,7 @@ import ExtrinsicDetail from "@pages/ExtrinsicDetail";
 import BlockList from "@pages/BlockList";
 import ExtrinsicList from "@pages/ExtrinsicList";
 import EventList from "@pages/EventList";
+import EventDetail from "@pages/EventDetail";
 
 export const Wrapper = styled.div`
   min-height: calc(100vh - 140px);
@@ -44,6 +45,7 @@ function App() {
           <Route path="/extrinsics/:index" component={ExtrinsicDetail} />
           <Route path="/extrinsics" component={ExtrinsicList} />
           <Route path="/events" component={EventList} />
+          <Route path="/events/:id" component={EventDetail} />
           <Route path="/accounts/:address" component={AccountDetail} />
           <Redirect to="/" />
         </Switch>
