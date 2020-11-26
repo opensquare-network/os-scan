@@ -35,7 +35,6 @@ const Wrapper = styled.div`
 
 export default function BlockChainNav() {
   const { pathname } = useLocation() || {}
-  console.log('pathname', pathname)
 
   return (
     <Wrapper>

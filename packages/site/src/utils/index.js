@@ -39,6 +39,14 @@ export function shortHash(hash = '', length = 5) {
   return `0x${nakedHash.slice(0, length)}...${nakedHash.slice(nakedHash.length - length)}`
 }
 
+export function shortStr(str = '', length = 5) {
+  if (str.length <= 2 * length) {
+    return str
+  }
+
+  return `${str.slice(0, length)}...${str.slice(str.length - length)}`
+}
+
 export function nonFunc() {
 }
 

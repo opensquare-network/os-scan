@@ -1,5 +1,3 @@
-import React from "react";
-
 export const columns = [
   { title: 'Height', dataIndex: 'height' },
   { title: 'Block Hash', dataIndex: 'hash' },
