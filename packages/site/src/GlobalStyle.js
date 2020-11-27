@@ -47,6 +47,16 @@ const GlobalStyle = createGlobalStyle`
       color: #40a9ff;
     }
   }
+  
+  pre {
+    background-color: whitesmoke;
+    color: #4a4a4a;
+    font-size: 0.875em;
+    overflow-x: auto;
+    padding: 1.25rem 1.5rem;
+    white-space: pre;
+    word-wrap: normal;
+  }
 `;
 
 export default GlobalStyle

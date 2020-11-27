@@ -17,7 +17,7 @@ export default function Extrinsics() {
   const { items: extrinsics, page, pageSize, total } = useSelector(extrinsicListSelector)
 
   const dataSource = extrinsics.map(extrinsic => {
-    const { hash, indexer, section, signer, name } = extrinsic
+    const { hash, indexer, section, signer, name, args } = extrinsic
 
     return {
       hash: <ExtrinsicLink value={hash} truncate={true} />,
@@ -26,6 +26,7 @@ export default function Extrinsics() {
       height: <BlockLink value={indexer.blockHeight} />,
       signer: <AddressLink addr={signer} truncate={true} />,
       action: <ExtrinsicAction section={section} name={name} />,
+      args,
       key: hash
     }
   })
@@ -40,6 +41,16 @@ export default function Extrinsics() {
       onChange={({ current, pageSize: size }) => {
         setTablePage(current)
         setTablePageSize(size)
+      }}
+      expandedRowRender={data => {
+        return (
+          <div>
+            <h3 style={{ fontSize: '13px', paddingLeft: '2px' }}>args:</h3>
+            <pre style={{ textAlign: 'left', margin: 0 }}>
+              {JSON.stringify(data.args, null, 2)}
+            </pre>
+          </div>
+        )
       }}
       pagination={{ current: page + 1, pageSize, total }}
       size="small"

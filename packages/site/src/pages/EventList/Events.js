@@ -18,7 +18,7 @@ export default function Events() {
   const { items: events, page, pageSize, total } = useSelector(eventListSelector)
 
   const dataSource = events.map(event => {
-    const { indexer, extrinsicHash, sort, section, method } = event
+    const { indexer, extrinsicHash, sort, section, method, meta, data } = event
     const id = `${indexer.blockHeight}-${sort}`
 
     return {
@@ -28,6 +28,8 @@ export default function Events() {
       timestamp: <DateShow value={indexer.blockTime} />,
       height: <BlockLink value={indexer.blockHeight} />,
       action: <ExtrinsicAction section={section} name={method} />,
+      meta,
+      data,
       key: id
     }
   })
@@ -43,6 +45,16 @@ export default function Events() {
       onChange={({ current, pageSize: size }) => {
         setTablePage(current)
         setTablePageSize(size)
+      }}
+      expandedRowRender={({ meta, data }) => {
+        return (
+          <div style={{ textAlign: 'left' }}>
+            <h3 style={{ fontSize: '13px', paddingLeft: '2px' }}>meta:</h3>
+            <pre>{JSON.stringify(meta, null, 2)}</pre>
+            <h3 style={{ fontSize: '13px', paddingLeft: '2px' }}>data:</h3>
+            <pre>{JSON.stringify(data, null, 2)}</pre>
+          </div>
+        )
       }}
       pagination={{ current: page + 1, pageSize, total }}
       size="small"

@@ -26,6 +26,7 @@ export default function Blocks() {
       ),
       timestamp: <DateShow value={block.blockTime} />,
       extrinsicNum: (block.extrinsics || []).length,
+      header: block.header,
       key: block.hash
     }
   })
@@ -40,6 +41,16 @@ export default function Blocks() {
       onChange={({ current, pageSize: size }) => {
         setTablePage(current)
         setTablePageSize(size)
+      }}
+      expandedRowRender={data => {
+        return (
+          <div>
+            <h3 style={{ fontSize: '13px', paddingLeft: '2px' }}>header:</h3>
+            <pre style={{ textAlign: 'left', margin: 0 }}>
+              {JSON.stringify(data.header, null, 2)}
+            </pre>
+          </div>
+        )
       }}
       pagination={{ current: page + 1, pageSize, total }}
       size="small"
