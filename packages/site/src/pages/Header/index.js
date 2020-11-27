@@ -61,7 +61,10 @@ export default function Header() {
             to="/blocks"
             isActive={(match, location) => {
               const path = location.pathname || ''
-              return path.startsWith('/blocks') || path.startsWith('/extrinsics') || path.startsWith('/events')
+              return path.startsWith('/blocks') ||
+                path.startsWith('/extrinsics') ||
+                path.startsWith('/events') ||
+                path.startsWith('/accounts')
             }}
           >
             Blockchain
