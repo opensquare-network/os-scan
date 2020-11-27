@@ -56,6 +56,11 @@ const GlobalStyle = createGlobalStyle`
     padding: 1.25rem 1.5rem;
     white-space: pre;
     word-wrap: normal;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
   }
 `;
 

@@ -18,7 +18,7 @@ function isHash(str = '') {
 }
 
 function isNum(str = null) {
-  return str !== null && /\d+/.test(str)
+  return str !== null && /^\d+$/.test(str)
 }
 
 function safeAdd(...items) {
