@@ -1,3 +1,4 @@
+const { getExtrinsicCollection } = require("../../mongo");
 const { isNum } = require("../../utils");
 const { isMongoId } = require("../../utils");
 const { ensure0xPrefix } = require("../../utils");
@@ -47,6 +48,25 @@ class BlockController {
 
     const col = await getBlockCollection()
     ctx.body = await col.findOne(query)
+  }
+
+  async getBlockExtrinsics(ctx) {
+    const { heightOrHashOrId } = ctx.params
+    let query = {}
+    if (/^\d+$/.test(heightOrHashOrId)) {
+      query = { 'indexer.blockHeight': parseInt(heightOrHashOrId) }
+    } else if (isHash(heightOrHashOrId)) {
+      query = { 'indexer.blockHash': ensure0xPrefix(heightOrHashOrId) }
+    } else {
+      ctx.status = 400
+      return
+    }
+
+    const col = await getExtrinsicCollection()
+    ctx.body = await col
+      .find(query)
+      .sort({ 'indexer.index': 1 })
+      .toArray()
   }
 }
 

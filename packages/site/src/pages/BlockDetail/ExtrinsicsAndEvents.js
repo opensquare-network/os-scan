@@ -1,0 +1,20 @@
+import React from "react";
+import Box from "@components/Box";
+import Nav from "@pages/BlockDetail/Nav";
+import { useLocation } from "react-router";
+import Extrinsics from "@pages/BlockDetail/Extrinsics";
+
+export default function ExtrinsicsAndEvents() {
+  const { pathname } = useLocation()
+  const isExtrinsic = (pathname || '').endsWith('/extrinsics')
+
+  return (
+    <Box>
+      <Nav />
+      {
+        isExtrinsic ?
+          <Extrinsics /> : null
+      }
+    </Box>
+  )
+}
