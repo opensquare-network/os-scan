@@ -1,3 +1,4 @@
+const { getEventCollection } = require("../../mongo");
 const { getExtrinsicCollection } = require("../../mongo");
 const { isNum } = require("../../utils");
 const { isMongoId } = require("../../utils");
@@ -66,6 +67,25 @@ class BlockController {
     ctx.body = await col
       .find(query)
       .sort({ 'indexer.index': 1 })
+      .toArray()
+  }
+
+  async getBlockEvents(ctx) {
+    const { heightOrHashOrId } = ctx.params
+    let query = {}
+    if (/^\d+$/.test(heightOrHashOrId)) {
+      query = { 'indexer.blockHeight': parseInt(heightOrHashOrId) }
+    } else if (isHash(heightOrHashOrId)) {
+      query = { 'indexer.blockHash': ensure0xPrefix(heightOrHashOrId) }
+    } else {
+      ctx.status = 400
+      return
+    }
+
+    const col = await getEventCollection()
+    ctx.body = await col
+      .find(query)
+      .sort({ 'sort': 1 })
       .toArray()
   }
 }

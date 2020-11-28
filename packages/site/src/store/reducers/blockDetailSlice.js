@@ -63,6 +63,17 @@ export const fetchBlockExtrinsics = (heightOrHash) => async dispatch => {
   }
 }
 
+export const fetchBlockEvents = (heightOrHash) => async dispatch => {
+  dispatch(setLoadingEvents(true))
+
+  try {
+    const { result } = await api.fetch(`/blocks/${heightOrHash}/events`)
+    dispatch(setEvents(result))
+  } finally {
+    dispatch(setLoadingEvents(false))
+  }
+}
+
 export const blockExtrinsicSelector = state => state.blockDetail.extrinsics
 export const blockEventSelector = state => state.blockDetail.events
 export const blockExtrinsicsLoadingSelector = state => state.blockDetail.loadingExtrinsics

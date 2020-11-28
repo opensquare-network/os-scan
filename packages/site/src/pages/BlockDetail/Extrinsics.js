@@ -30,7 +30,6 @@ export default function Extrinsics() {
   }, [dispatch, heightOrHash])
 
   const extrinsics = useSelector(blockExtrinsicSelector)
-  console.log('extrinsics', extrinsics)
   const loading = useSelector(blockExtrinsicsLoadingSelector)
 
   const dataSource = (extrinsics || []).map(extrinsic => {
