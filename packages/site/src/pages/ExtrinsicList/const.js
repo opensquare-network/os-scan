@@ -5,4 +5,5 @@ export const columns = [
   { title: 'Block Height', dataIndex: 'height' },
   { title: 'Signer', dataIndex: 'signer' },
   { title: 'Action', dataIndex: 'action' },
+  { title: 'Result', dataIndex: 'result' },
 ]

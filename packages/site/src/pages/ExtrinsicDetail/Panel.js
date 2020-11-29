@@ -4,6 +4,8 @@ import PanelList from "@components/PanelList";
 import { extrinsicDetailSelector } from "@store/reducers/extrinsicDetailSlice";
 import DateShow from "@components/DateShow";
 import PanelJson from "@components/PanelJson";
+import Success from "@components/Success";
+import Fail from "@components/Fail";
 
 export default function Panel() {
   const extrinsic = useSelector(extrinsicDetailSelector)
@@ -50,6 +52,10 @@ export default function Panel() {
     {
       label: 'Data',
       data: extrinsic?.data,
+    },
+    {
+      label: 'Result',
+      data: extrinsic?.isSuccess ? <Success /> : <Fail />,
     },
   ]
 

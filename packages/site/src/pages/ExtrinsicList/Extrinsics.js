@@ -7,6 +7,8 @@ import ExtrinsicLink from "@components/ExtrinsicLink";
 import DateShow from "@components/DateShow";
 import BlockLink from "@components/BlockLink";
 import { AddressLink, ExtrinsicAction } from "@components/index";
+import Success from "@components/Success";
+import Fail from "@components/Fail";
 
 export default function Extrinsics() {
   const [tablePage, setTablePage] = useState(1)
@@ -17,7 +19,7 @@ export default function Extrinsics() {
   const { items: extrinsics, page, pageSize, total } = useSelector(extrinsicListSelector)
 
   const dataSource = extrinsics.map(extrinsic => {
-    const { hash, indexer, section, signer, name, args } = extrinsic
+    const { hash, indexer, section, signer, name, args, isSuccess } = extrinsic
 
     return {
       hash: <ExtrinsicLink value={hash} truncate={true} />,
@@ -26,6 +28,7 @@ export default function Extrinsics() {
       height: <BlockLink value={indexer.blockHeight} />,
       signer: <AddressLink addr={signer} truncate={true} />,
       action: <ExtrinsicAction section={section} name={name} />,
+      result: isSuccess ? <Success /> : <Fail />,
       args,
       key: hash
     }
