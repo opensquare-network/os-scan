@@ -42,7 +42,7 @@ function App() {
           <Route exact path="/bounties" component={Bounties} />
           <Route path="/blocks/:heightOrHash" component={BlockDetail} />
           <Route path="/blocks" component={BlockList} />
-          <Route path="/extrinsics/:index" component={ExtrinsicDetail} />
+          <Route path="/extrinsics/:hash" component={ExtrinsicDetail} />
           <Route path="/extrinsics" component={ExtrinsicList} />
           <Route path="/events" component={EventList} />
           <Route path="/events/:id" component={EventDetail} />

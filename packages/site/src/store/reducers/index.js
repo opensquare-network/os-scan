@@ -6,6 +6,7 @@ import blocksReducer from './blockSlice'
 import extrinsicsReducer from './extrinsicSlice'
 import eventsReducer from './eventSlice'
 import blockDetailReducer from './blockDetailSlice'
+import extrinsicDetailReducer from './extrinsicDetailSlice'
 
 export default combineReducers({
   test: testReducer,
@@ -15,4 +16,5 @@ export default combineReducers({
   extrinsics: extrinsicsReducer,
   events: eventsReducer,
   blockDetail: blockDetailReducer,
+  extrinsicDetail: extrinsicDetailReducer,
 })

@@ -5,7 +5,6 @@ import { blockEventSelector, blockEventsLoadingSelector, fetchBlockEvents } from
 import Table from "antd/lib/table";
 import EventLink from "@components/EventLink";
 import ExtrinsicLink from "@components/ExtrinsicLink";
-import BlockLink from "@components/BlockLink";
 import { ExtrinsicAction } from "@components/index";
 
 export const columns = [
