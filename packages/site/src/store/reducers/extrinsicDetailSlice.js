@@ -6,6 +6,8 @@ const extrinsicDetailSlice = createSlice({
   initialState: {
     extrinsic: null,
     loading: false,
+    events: [],
+    loadingEvents: false
   },
   reducers: {
     setExtrinsic(state, { payload }) {
@@ -14,12 +16,20 @@ const extrinsicDetailSlice = createSlice({
     setLoading(state, { payload }) {
       state.loading = payload
     },
+    setEvents(state, { payload }) {
+      state.events = payload
+    },
+    setLoadingEvents(state, { payload }) {
+      state.loadingEvents = payload
+    },
   }
 })
 
 export const {
   setExtrinsic,
   setLoading,
+  setEvents,
+  setLoadingEvents,
 } = extrinsicDetailSlice.actions
 
 export const fetchExtrinsic = (hash) => async dispatch => {
@@ -32,5 +42,17 @@ export const fetchExtrinsic = (hash) => async dispatch => {
   }
 }
 
+export const fetchExtrinsicEvents = hash => async dispatch => {
+  dispatch(setLoadingEvents(true))
+  try {
+    const { result } = await api.fetch(`/extrinsics/${hash}/events`)
+    dispatch(setEvents(result))
+  } finally {
+    dispatch(setLoadingEvents(false))
+  }
+}
+
+export const extrinsicEventSelector = state => state.extrinsicDetail.events
+export const extrinsicEventsLoadingSelector = state => state.extrinsicDetail.loadingEvents
 export const extrinsicDetailSelector = state => state.extrinsicDetail.extrinsic
 export default extrinsicDetailSlice.reducer

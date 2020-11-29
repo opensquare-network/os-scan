@@ -5,6 +5,9 @@ import { useParams } from "react-router";
 import { useDispatch } from "react-redux";
 import { fetchExtrinsic } from "@store/reducers/extrinsicDetailSlice";
 import Panel from "@pages/ExtrinsicDetail/Panel";
+import Events from "@pages/ExtrinsicDetail/Events";
+import Box from "@components/Box";
+import Nav from "@pages/ExtrinsicDetail/Nav";
 
 const Wrapper = styled.div`
   nav {
@@ -39,6 +42,10 @@ export default function ExtrinsicDetail() {
     <Wrapper>
       {breadcrumb}
       <Panel />
+      <Box>
+        <Nav/>
+        <Events />
+      </Box>
     </Wrapper>
   )
 }

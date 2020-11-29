@@ -29,27 +29,27 @@ export default function Panel() {
     },
     {
       label: 'Sender',
-      data: extrinsic.signer,
+      data: extrinsic?.signer,
     },
     {
       label: 'Section',
-      data: extrinsic.section,
+      data: extrinsic?.section,
     },
     {
       label: 'Name',
-      data: extrinsic.name,
+      data: extrinsic?.name,
     },
     {
       label: 'Args',
-      data: <PanelJson json={extrinsic.args} />,
+      data: <PanelJson json={extrinsic?.args} />,
     },
     {
       label: 'Version',
-      data: extrinsic.version,
+      data: extrinsic?.version,
     },
     {
       label: 'Data',
-      data: extrinsic.data,
+      data: extrinsic?.data,
     },
   ]
 

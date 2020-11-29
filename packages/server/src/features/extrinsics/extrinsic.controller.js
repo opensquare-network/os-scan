@@ -1,3 +1,4 @@
+const { getEventCollection } = require("../../mongo");
 const { getExtrinsicCollection } = require("../../mongo");
 const { extractPage } = require("../../utils");
 const { isNum } = require("../../utils");
@@ -45,6 +46,17 @@ class ExtrinsicController {
 
     const col = await getExtrinsicCollection()
     ctx.body = await col.findOne({ hash })
+  }
+
+  async getExtrinsicEvents(ctx) {
+    const { hash } = ctx.params
+    if (!isHash(hash)) {
+      ctx.status = 400
+      return
+    }
+
+    const col = await getEventCollection()
+    ctx.body = await col.find({ extrinsicHash: hash }).sort({ sort: 1 }).toArray()
   }
 }
 

@@ -32,11 +32,11 @@ export default function LatestImportantExtrinsics() {
   )
 
   if (extrinsics && extrinsics.length) {
-    body = extrinsics.slice(0, 6).map(({ indexer: { blockHeight, index, blockTime }, section, name }, idx) => {
+    body = extrinsics.slice(0, 6).map(({ indexer: { blockHeight, index, blockTime }, section, name, hash }, idx) => {
       return (
         <tr key={idx}>
           <td>
-            <TxLink value={`${blockHeight}-${index}`} />
+            <TxLink value={`${blockHeight}-${index}`} hash={hash} />
           </td>
           <td>
             {`${section}(${name})`}
