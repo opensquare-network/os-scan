@@ -26,6 +26,7 @@ export default function Blocks() {
       ),
       timestamp: <DateShow value={block.blockTime} />,
       extrinsicNum: (block.extrinsics || []).length,
+      eventsCount: block.eventsCount,
       header: block.header,
       key: block.hash
     }
