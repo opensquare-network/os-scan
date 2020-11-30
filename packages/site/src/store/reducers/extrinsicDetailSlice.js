@@ -14,6 +14,7 @@ const extrinsicDetailSlice = createSlice({
       state.extrinsic = payload
     },
     setLoading(state, { payload }) {
+
       state.loading = payload
     },
     setEvents(state, { payload }) {

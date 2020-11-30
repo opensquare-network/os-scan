@@ -7,14 +7,14 @@ import Events from "@pages/BlockDetail/Events";
 
 export default function ExtrinsicsAndEvents() {
   const { pathname } = useLocation()
-  const isExtrinsic = (pathname || '').endsWith('/extrinsics')
+  const isEvent = (pathname || '').endsWith('/events')
 
   return (
     <Box>
       <Nav />
       {
-        isExtrinsic ?
-          <Extrinsics /> : <Events />
+        isEvent ?
+          <Events /> : <Extrinsics />
       }
     </Box>
   )

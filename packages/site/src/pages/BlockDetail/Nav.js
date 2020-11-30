@@ -37,17 +37,17 @@ const Wrapper = styled.div`
 export default function Nav() {
   let { url } = useRouteMatch();
   const { pathname } = useLocation()
-  const isExtrinsic = (pathname || '').endsWith('/extrinsics')
+  const isEvent = (pathname || '').endsWith('/events')
 
   return (
     <Wrapper>
       <ul>
-        <li className={isExtrinsic ? 'is-active' : ''}>
+        <li className={isEvent ? '' : 'is-active'}>
           <NavLink exact activeClassName="active" to={`${url}/extrinsics`}>
             Extrinsics
           </NavLink>
         </li>
-        <li className={!isExtrinsic ? 'is-active' : ''}>
+        <li className={isEvent ? 'is-active' : ''}>
           <NavLink exact activeClassName="active" to={`${url}/events`}>
             Events
           </NavLink>

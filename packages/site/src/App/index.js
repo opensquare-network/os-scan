@@ -44,8 +44,8 @@ function App() {
           <Route path="/blocks" component={BlockList} />
           <Route path="/extrinsics/:hash" component={ExtrinsicDetail} />
           <Route path="/extrinsics" component={ExtrinsicList} />
-          <Route path="/events" component={EventList} />
           <Route path="/events/:id" component={EventDetail} />
+          <Route path="/events" component={EventList} />
           <Route path="/accounts/:address" component={AccountDetail} />
           <Redirect to="/" />
         </Switch>
