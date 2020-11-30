@@ -6,7 +6,7 @@ import Header from "@pages/Header";
 import Footer from "@pages/Footer";
 import "@services/socket"
 import BlockChain from "@pages/BlockChain";
-import Bounties from "@pages/Bounties";
+import Bounties from "@pages/BountyList";
 import BlockDetail from "@pages/BlockDetail";
 import AccountDetail from "@pages/AccountDetail";
 import ExtrinsicDetail from "@pages/ExtrinsicDetail";
@@ -14,6 +14,7 @@ import BlockList from "@pages/BlockList";
 import ExtrinsicList from "@pages/ExtrinsicList";
 import EventList from "@pages/EventList";
 import EventDetail from "@pages/EventDetail";
+import BountyDetail from "@pages/BountyDetail";
 
 export const Wrapper = styled.div`
   min-height: calc(100vh - 140px);
@@ -40,6 +41,7 @@ function App() {
           <Route exact path="/" component={Home} />
           <Route exact path="/blockchain" component={BlockChain} />
           <Route exact path="/bounties" component={Bounties} />
+          <Route exact path="/bounties/:bountyId" component={BountyDetail} />
           <Route path="/blocks/:heightOrHash" component={BlockDetail} />
           <Route path="/blocks" component={BlockList} />
           <Route path="/extrinsics/:hash" component={ExtrinsicDetail} />

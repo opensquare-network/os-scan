@@ -71,7 +71,15 @@ export default function Header() {
           </NavLink>
         </li>
         <li>
-          <NavLink exact activeClassName="active" to="/bounties">
+          <NavLink
+            exact
+            activeClassName="active"
+            to="/bounties"
+            isActive={(match, location) => {
+              const path = location.pathname || ''
+              return path.startsWith('/bounties')
+            }}
+          >
             Bounties
           </NavLink>
         </li>
