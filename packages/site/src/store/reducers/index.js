@@ -9,6 +9,7 @@ import blockDetailReducer from './blockDetailSlice'
 import extrinsicDetailReducer from './extrinsicDetailSlice'
 import eventDetailReducer from './eventDetailSlice'
 import bountiesReducer from './bountySlice'
+import bountyDetailReducer from './bountyDetailSlice'
 
 export default combineReducers({
   test: testReducer,
@@ -21,4 +22,5 @@ export default combineReducers({
   extrinsicDetail: extrinsicDetailReducer,
   eventDetail: eventDetailReducer,
   bounties: bountiesReducer,
+  bountyDetail: bountyDetailReducer,
 })

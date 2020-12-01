@@ -4,4 +4,5 @@ export const columns = [
   { title: 'Currency', dataIndex: 'currency' },
   { title: 'Title', dataIndex: 'title', },
   { title: 'State', dataIndex: 'state', },
+  { title: 'Create Time', dataIndex: 'timestamp', },
 ]

@@ -46,7 +46,7 @@ async function saveNewBounty(json, indexer) {
 
   const bountyCol = await getBountyCollection()
   await bountyCol.insertOne({
-    blockHeight: indexer.blockHeight,
+    indexer,
     creator: address,
     bountyId,
     meta: meta.toJSON()
@@ -62,7 +62,7 @@ async function saveBountyState(method, json, indexer) {
 
   const bountyStateCol = await getBountyStateCollection()
   await bountyStateCol.insertOne({
-    blockHeight: indexer.blockHeight,
+    indexer,
     bountyId,
     state: state.toJSON(),
     data: json

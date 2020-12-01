@@ -5,18 +5,8 @@ import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBlock, fetchBlockLoadingSelector } from "@store/reducers/blockDetailSlice";
 import Panel from "@pages/BlockDetail/Panel";
-import styled from "styled-components"
 import ExtrinsicsAndEvents from "@pages/BlockDetail/ExtrinsicsAndEvents";
-
-const Wrapper = styled.div`
-  nav {
-    margin-bottom: 24px;
-  }
-  
-  & > div {
-    margin-top: 24px;
-  }
-`
+import DetailWrapper from "@components/DetailWrapper";
 
 export default function BlockDetail() {
   const { heightOrHash } = useParams()
@@ -51,10 +41,10 @@ export default function BlockDetail() {
   }
 
   return (
-    <Wrapper>
+    <DetailWrapper>
       {breadcrumb}
       <Panel />
       <ExtrinsicsAndEvents />
-    </Wrapper>
+    </DetailWrapper>
   )
 }

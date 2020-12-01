@@ -5,6 +5,7 @@ import { bountyListSelector, fetchBounties, fetchBountiesLoadingSelector } from 
 import Table from "antd/lib/table";
 import { columns } from "@pages/BountyList/columns";
 import { AddressLink, BountyLink } from "@components/index";
+import DateShow from "@components/DateShow";
 
 export default function Bounties() {
   const [tablePage, setTablePage] = useState(1)
@@ -23,6 +24,7 @@ export default function Bounties() {
       bountyId,
       meta: { V1: { owner, currency_id: currencyId, title }, },
       state: { state },
+      indexer: { blockTime },
     } = bounty
     return {
       bountyId: <BountyLink value={bountyId} truncate={true} />,
@@ -30,6 +32,7 @@ export default function Bounties() {
       currency: currencyId,
       title,
       state,
+      timestamp: <DateShow value={blockTime} />,
       key: bountyId
     }
   })
