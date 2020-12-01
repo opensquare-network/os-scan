@@ -5,6 +5,9 @@ import { useDispatch } from "react-redux";
 import { fetchBounty } from "@store/reducers/bountyDetailSlice";
 import Breadcrumb from "@components/Breadcrumb";
 import BountyDetailPanel from "@pages/BountyDetail/Panel";
+import Box from "@components/Box";
+import Nav from "@pages/BountyDetail/Nav";
+import Hunters from "@pages/BountyDetail/Hunters";
 
 export default function BountyDetail() {
   const { bountyId } = useParams()
@@ -29,6 +32,10 @@ export default function BountyDetail() {
     <DetailWrapper>
       {breadcrumb}
       <BountyDetailPanel />
+      <Box>
+        <Nav />
+        <Hunters />
+      </Box>
     </DetailWrapper>
   )
 }

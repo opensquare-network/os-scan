@@ -42,6 +42,7 @@ function App() {
           <Route exact path="/blockchain" component={BlockChain} />
           <Route exact path="/bounties" component={Bounties} />
           <Route exact path="/bounties/:bountyId" component={BountyDetail} />
+          <Route exact path="/bounties/:bountyId/hunters" component={BountyDetail} />
           <Route path="/blocks/:heightOrHash" component={BlockDetail} />
           <Route path="/blocks" component={BlockList} />
           <Route path="/extrinsics/:hash" component={ExtrinsicDetail} />

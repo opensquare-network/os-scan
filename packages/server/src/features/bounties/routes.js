@@ -5,5 +5,6 @@ const bountyController = require('./bounty.controller')
 
 router.get('/bounties', bountyController.getBounties)
 router.get('/bounties/:bountyId', bountyController.getBounty)
+router.get('/bounties/:bountyId/hunters', bountyController.getBountyHunters)
 
 module.exports = router

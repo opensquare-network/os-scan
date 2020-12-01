@@ -6,6 +6,8 @@ const bountyDetailSlice = createSlice({
   initialState: {
     bounty: null,
     loading: false,
+    hunters: [],
+    loadingHunters: false,
   },
   reducers: {
     setBounty(state, { payload }) {
@@ -14,12 +16,20 @@ const bountyDetailSlice = createSlice({
     setLoading(state, { payload }) {
       state.loading = payload
     },
+    setHunters(state, { payload }) {
+      state.hunters = payload
+    },
+    setLoadingHunters(state, { payload }) {
+      state.loadingHunters = payload
+    },
   }
 })
 
 export const {
   setBounty,
   setLoading,
+  setHunters,
+  setLoadingHunters,
 } = bountyDetailSlice.actions
 
 export const fetchBounty = bountyId => async dispatch => {
@@ -32,5 +42,17 @@ export const fetchBounty = bountyId => async dispatch => {
   }
 }
 
+export const fetchBountyHunters = bountyId => async dispatch => {
+  dispatch(setLoadingHunters(true))
+  try {
+    const { result } = await api.fetch(`/bounties/${bountyId}/hunters`)
+    dispatch(setHunters(result))
+  } finally {
+    dispatch(setLoadingHunters(false))
+  }
+}
+
 export const bountyDetailSelector = state => state.bountyDetail.bounty
+export const bountyHunterSelector = state => state.bountyDetail.hunters
+export const fetchHuntersLoadingSelector = state => state.bountyDetail.loadingHunters
 export default bountyDetailSlice.reducer

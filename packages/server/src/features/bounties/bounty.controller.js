@@ -1,3 +1,4 @@
+const { getBountyHuntersCollection } = require("../../mongo");
 const { getBountyStateCollection } = require("../../mongo");
 const { getBountyCollection } = require("../../mongo");
 const { extractPage } = require("../../utils");
@@ -49,6 +50,14 @@ class BountyController {
     const bounty = await col.findOne({ bountyId })
     const bounties = await addStateForBounties([bounty])
     ctx.body = bounties[0]
+  }
+
+  async getBountyHunters(ctx) {
+    const { bountyId = '' } = ctx.params
+    const bountyHuntersCol = await getBountyHuntersCollection()
+    const records = await bountyHuntersCol.find({ bountyId }).sort({ blockHeight: -1 }).limit(1).toArray()
+
+    ctx.body = records.length <= 0 ? [] : records[0].hunters
   }
 }
 

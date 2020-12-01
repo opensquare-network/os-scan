@@ -20,7 +20,10 @@ export default function BountyDetailPanel() {
     state: {
       state
     }
-  } = bounty
+  } = bounty || {
+    meta: { V1: {} },
+    state: {}
+  }
 
   const dataSource = [
     {
