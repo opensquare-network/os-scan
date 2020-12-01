@@ -56,12 +56,12 @@ async function main() {
       continue
     }
 
-    await handleBlock(block)
+    const allEvents = await api.query.system.events.at(blockHash)
+    await handleBlock(block, allEvents)
     preBlockHash = block.block.hash.toHex()
     console.log(`block ${(block.block.header.number.toNumber())} is saved to db`)
 
     const blockIndexer = getBlockIndexer(block.block)
-    const allEvents = await api.query.system.events.at(blockHash)
     await handleEvents(allEvents, blockIndexer, block.block.extrinsics)
     await handleExtrinsics(block.block.extrinsics, allEvents, blockIndexer)
 

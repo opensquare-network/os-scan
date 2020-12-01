@@ -3,4 +3,5 @@ export const columns = [
   { title: 'Block Hash', dataIndex: 'hash' },
   { title: 'Block Time', dataIndex: 'timestamp' },
   { title: 'Extrinsics Count', dataIndex: 'extrinsicNum', },
+  { title: 'Events Count', dataIndex: 'eventsCount', },
 ]
