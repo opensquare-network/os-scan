@@ -47,7 +47,7 @@ async function removeUselessHistoryRecords(bountyId, indexer) {
 
   if (historyRecords.length > 1) {
     const maxSafeHeight = Math.max(...historyRecords.map(r => r.blockHeight))
-    await bountyHuntersCol.deleteMany({ blockHeight: { $lt: maxSafeHeight } })
+    await bountyHuntersCol.deleteMany({ bountyId, blockHeight: { $lt: maxSafeHeight } })
   }
 }
 

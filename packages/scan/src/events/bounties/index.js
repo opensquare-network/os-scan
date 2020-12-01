@@ -78,7 +78,7 @@ async function saveBountyState(method, json, indexer) {
 
   if (records.length > 1) {
     const maxSafeHeight = Math.max(...records.map(r => r.blockHeight))
-    await bountyStateCol.deleteMany({ blockHeight: { $lt: maxSafeHeight } })
+    await bountyStateCol.deleteMany({ bountyId, blockHeight: { $lt: maxSafeHeight } })
   }
 }
 
