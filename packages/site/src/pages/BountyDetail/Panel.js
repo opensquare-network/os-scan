@@ -1,11 +1,25 @@
 import { useSelector } from "react-redux";
-import { bountyDetailSelector } from "@store/reducers/bountyDetailSlice";
-import React from "react";
+import { bountyDetailSelector, bountyContentSelector } from "@store/reducers/bountyDetailSlice";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchBountyContent } from "@store/reducers/bountyDetailSlice";
 import PanelList from "@components/PanelList";
 import { AddressLink } from "@components/index";
+import ReactMarkdown from 'react-markdown';
+import styled from "styled-components";
+
+const Content = styled.div`
+  padding: 1em;
+  background-color: #eee;
+  height: auto;
+  max-height: 30vh;
+  overflow: auto;
+`;
 
 export default function BountyDetailPanel() {
+  const dispatch = useDispatch()
   const bounty = useSelector(bountyDetailSelector)
+  const content = useSelector(bountyContentSelector)
   const {
     bountyId,
     creator,
@@ -24,6 +38,12 @@ export default function BountyDetailPanel() {
     meta: { V1: {} },
     state: {}
   }
+
+  useEffect(() => {
+    if (digest) {
+      dispatch(fetchBountyContent(digest))
+    }
+  }, [dispatch, digest])
 
   const dataSource = [
     {
@@ -58,6 +78,10 @@ export default function BountyDetailPanel() {
       label: 'Content Digest',
       data: digest
     },
+    {
+      label: 'Content Detail',
+      data: <Content><ReactMarkdown>{content?.content || 'No data'}</ReactMarkdown></Content>,
+    }
   ]
 
   return (
