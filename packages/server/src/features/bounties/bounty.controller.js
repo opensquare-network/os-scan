@@ -10,7 +10,7 @@ async function addStateForBounties(bounties = []) {
   const col = await getBountyStateCollection()
 
   const bountyStateRecords = await col.find({ bountyId: { $in: ids } }).toArray()
-  bountyStateRecords.sort((a, b) => b.blockHeight - a.blockHeight)
+  bountyStateRecords.sort((a, b) => b.indexer.blockHeight - a.indexer.blockHeight)
 
   return bounties.map(bounty => {
     const state = bountyStateRecords.find(state => state.bountyId === bounty.bountyId)
@@ -29,7 +29,7 @@ class BountyController {
     const col = await getBountyCollection()
     const bounties = await col
       .find({})
-      .sort({ blockHeight: 1 })
+      .sort({ 'indexer.blockHeight': 1 })
       .skip(page * pageSize)
       .limit(pageSize)
       .toArray()
@@ -55,7 +55,7 @@ class BountyController {
   async getBountyHunters(ctx) {
     const { bountyId = '' } = ctx.params
     const bountyHuntersCol = await getBountyHuntersCollection()
-    const records = await bountyHuntersCol.find({ bountyId }).sort({ blockHeight: -1 }).limit(1).toArray()
+    const records = await bountyHuntersCol.find({ bountyId }).sort({ 'indexer.blockHeight': -1 }).limit(1).toArray()
 
     ctx.body = records.length <= 0 ? [] : records[0].hunters
   }

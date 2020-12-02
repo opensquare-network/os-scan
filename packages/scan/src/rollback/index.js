@@ -46,17 +46,17 @@ async function deleteEventsFrom(blockHeight) {
 
 async function deleteBountiesFrom(blockHeight) {
   const bountyCol = await getBountyCollection()
-  await bountyCol.deleteMany({ blockHeight: { $gte: blockHeight } })
+  await bountyCol.deleteMany({ 'indexer.blockHeight': { $gte: blockHeight } })
 }
 
 async function deleteBountyStateFrom(blockHeight) {
   const bountyStateCol = await getBountyStateCollection()
-  await bountyStateCol.deleteMany({ blockHeight: { $gte: blockHeight } })
+  await bountyStateCol.deleteMany({ 'indexer.blockHeight': { $gte: blockHeight } })
 }
 
 async function deleteBountyHuntersFrom(blockHeight) {
   const bountyHuntersCol = await getBountyHuntersCollection()
-  await bountyHuntersCol.deleteMany({ blockHeight: { $gte: blockHeight } })
+  await bountyHuntersCol.deleteMany({ 'indexer.blockHeight': { $gte: blockHeight } })
 }
 
 module.exports = {

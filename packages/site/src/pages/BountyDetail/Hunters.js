@@ -8,9 +8,11 @@ import {
 } from "@store/reducers/bountyDetailSlice";
 import Table from "antd/lib/table";
 import { AddressLink } from "@components/index";
+import DateShow from "@components/DateShow";
 
 export const columns = [
   { title: 'Address', dataIndex: 'hunter' },
+  { title: 'Hunt Time', dataIndex: 'huntAt' },
 ]
 
 export default function Hunters() {
@@ -27,8 +29,9 @@ export default function Hunters() {
   const loading = useSelector(fetchHuntersLoadingSelector)
 
   const dataSource = hunters.map(hunter => ({
-    hunter: <AddressLink addr={hunter} truncate={false} />,
-    key: hunter
+    hunter: <AddressLink addr={hunter.accountId} truncate={false} />,
+    huntAt: <DateShow value={hunter.indexer.blockTime} />,
+    key: hunter.accountId
   }))
 
   return (

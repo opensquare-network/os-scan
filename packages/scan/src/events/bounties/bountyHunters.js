@@ -5,10 +5,10 @@ async function handleHuntBounty(json, indexer) {
   const [bountyId, accountId] = json
   const bountyHuntersCol = await getBountyHuntersCollection()
 
-  const records = await bountyHuntersCol.find({ bountyId }).sort({ blockHeight: -1 }).limit(1).toArray()
-  let hunters = records.length > 0 ? [...records[0].hunters, accountId] : [accountId]
+  const records = await bountyHuntersCol.find({ bountyId }).sort({ 'indexer.blockHeight': -1 }).limit(1).toArray()
+  let hunters = records.length > 0 ? [...records[0].hunters, { accountId, indexer }] : [{ accountId, indexer }]
   await bountyHuntersCol.insertOne({
-    blockHeight: indexer.blockHeight,
+    indexer,
     bountyId,
     hunters
   })
@@ -19,15 +19,15 @@ async function handleHuntBounty(json, indexer) {
 async function handleCancelHuntBounty(json, indexer) {
   const [bountyId, accountId] = json
   const bountyHuntersCol = await getBountyHuntersCollection()
-  const records = await bountyHuntersCol.find({ bountyId }).sort({ blockHeight: -1 }).limit(1).toArray()
+  const records = await bountyHuntersCol.find({ bountyId }).sort({ 'indexer.blockHeight': -1 }).limit(1).toArray()
 
   if (records.length <= 0) {
     return
   }
 
-  let hunters = records[0].hunters.filter(hunter => hunter !== accountId)
+  let hunters = records[0].hunters.filter(hunter => hunter.accountId !== accountId)
   await bountyHuntersCol.insertOne({
-    blockHeight: indexer.blockHeight,
+    indexer,
     bountyId,
     hunters
   })
@@ -41,13 +41,13 @@ async function removeUselessHistoryRecords(bountyId, indexer) {
   const historyRecords = await bountyHuntersCol
     .find({
       bountyId,
-      blockHeight: { $lt: indexer.blockHeight - safeBlocks }
+      'indexer.blockHeight': { $lt: indexer.blockHeight - safeBlocks }
     })
     .toArray()
 
   if (historyRecords.length > 1) {
-    const maxSafeHeight = Math.max(...historyRecords.map(r => r.blockHeight))
-    await bountyHuntersCol.deleteMany({ bountyId, blockHeight: { $lt: maxSafeHeight } })
+    const maxSafeHeight = Math.max(...historyRecords.map(r => r.indexer.blockHeight))
+    await bountyHuntersCol.deleteMany({ bountyId, 'indexer.blockHeight': { $lt: maxSafeHeight } })
   }
 }
 
