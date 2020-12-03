@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function({ json }) {
+export default function PanelJson({ json }) {
   return (
     <pre
       style={{
