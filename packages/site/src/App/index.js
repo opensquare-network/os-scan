@@ -15,6 +15,7 @@ import ExtrinsicList from "@pages/ExtrinsicList";
 import EventList from "@pages/EventList";
 import EventDetail from "@pages/EventDetail";
 import BountyDetail from "@pages/BountyDetail";
+import AccountList from "@pages/AccountList";
 
 export const Wrapper = styled.div`
   min-height: calc(100vh - 140px);
@@ -50,6 +51,7 @@ function App() {
           <Route path="/events/:id" component={EventDetail} />
           <Route path="/events" component={EventList} />
           <Route path="/accounts/:address" component={AccountDetail} />
+          <Route path="/accounts" component={AccountList} />
           <Redirect to="/" />
         </Switch>
       </Wrapper>

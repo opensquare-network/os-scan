@@ -48,6 +48,9 @@ export default function BlockChainNav() {
         <li className={pathname === '/events' ? 'is-active' : ''}>
           <NavLink to="/events">Events</NavLink>
         </li>
+        <li className={pathname === '/accounts' ? 'is-active' : ''}>
+          <NavLink to="/accounts">Accounts</NavLink>
+        </li>
       </ul>
     </Wrapper>
   )
