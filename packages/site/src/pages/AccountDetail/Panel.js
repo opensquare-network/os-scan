@@ -2,7 +2,6 @@ import { useSelector } from "react-redux";
 import { accountDetailSelector } from "@store/reducers/accountDetailSlice";
 import React from "react";
 import PanelList from "@components/PanelList";
-import DateShow from "@components/DateShow";
 
 export default function Panel() {
   const account = useSelector(accountDetailSelector)

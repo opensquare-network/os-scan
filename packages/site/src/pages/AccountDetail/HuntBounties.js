@@ -1,4 +1,3 @@
-import BlockChainWrapper from "@components/BlockChainWrapper";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +12,7 @@ export const columns = [
   { title: 'Currency', dataIndex: 'currency' },
   { title: 'Title', dataIndex: 'title', },
   { title: 'State', dataIndex: 'state', },
-  { title: 'Create Time', dataIndex: 'timestamp', },
+  { title: 'Hunt Time', dataIndex: 'timestamp', },
 ]
 
 export default function HuntBounties() {
@@ -38,7 +37,7 @@ export default function HuntBounties() {
       bountyId,
       meta: { V1: { owner, currency_id: currencyId, title }, },
       state: { state },
-      indexer: { blockTime },
+      hunter: { indexer: { blockTime } },
     } = bounty
     return {
       bountyId: <BountyLink value={bountyId} truncate={true} />,

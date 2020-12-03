@@ -134,6 +134,11 @@ class BountyService {
     const query = [
       ...this.constructBountiesByHunterQuery(hunter),
       {
+        $project: {
+          hunter: { $arrayElemAt: ['$latestBountyHunters.hunter', 0] }
+        }
+      },
+      {
         $sort: {
           'hunter.indexer.blockHeight': -1
         }
@@ -150,13 +155,13 @@ class BountyService {
       }, {
         $project: {
           bounty: { $arrayElemAt: ['$bountyDetail', 0] },
-          hunter: { $arrayElemAt: ['$latestBountyHunters.hunter', 0] }
+          hunter: '$hunter'
         }
       }]
 
     const bountyHunterCol = await getBountyHuntersCollection()
     const result = await bountyHunterCol.aggregate(query).toArray()
-    const bountiesWithState = await this.addStateForBounties(result.map(item => item.bounty))
+    const bountiesWithState = await this.addStateForBounties(result.map(item => ({ ...item.bounty, hunter: item.hunter })))
     return bountiesWithState
   }
 }

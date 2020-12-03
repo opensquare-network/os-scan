@@ -5,8 +5,6 @@ import { useDispatch } from "react-redux";
 import { fetchAccount } from "@store/reducers/accountDetailSlice";
 import Breadcrumb from "@components/Breadcrumb";
 import AccountDetailPanel from "@pages/AccountDetail/Panel";
-import Box from "@components/Box";
-import Nav from "@pages/AccountDetail/Nav";
 import ExtrinsicsAndFundAndHunt from "@pages/AccountDetail/ExtrinsicsAndFundAndHunt";
 
 export default function AccountDetail() {
