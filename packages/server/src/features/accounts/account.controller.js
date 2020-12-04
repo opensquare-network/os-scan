@@ -50,7 +50,7 @@ class AccountController {
     const col = await getExtrinsicCollection()
     const total = await col.countDocuments({ signer: address })
     const extrinsics = await col
-      .find({ signer: address })
+      .find({ 'connect.stakeholders': address })
       .sort({ 'indexer.blockHeight': -1 })
       .toArray()
 

@@ -1,7 +1,8 @@
 const sections = {
   bounties: 'osBounties',
+  reputation: 'osReputation',
   currencies: 'currencies',
-  balance: 'balances',
+  balances: 'balances',
 }
 
 const safeBlocks = 300

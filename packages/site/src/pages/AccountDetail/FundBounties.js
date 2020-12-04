@@ -39,7 +39,7 @@ export default function FundBounties() {
     } = bounty
     return {
       bountyId: <BountyLink value={bountyId} truncate={true} />,
-      owner: <AddressLink addr={owner} truncate={true} />,
+      owner: <AddressLink addr={owner} truncate={true} allowLinkToSelf={false} />,
       currency: currencyId,
       title,
       state,

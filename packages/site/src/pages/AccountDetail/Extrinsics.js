@@ -42,7 +42,7 @@ export default function Extrinsics() {
       index: extrinsic.indexer.index,
       timestamp: <DateShow value={indexer.blockTime} />,
       height: <BlockLink value={indexer.blockHeight} />,
-      signer: <AddressLink addr={signer} truncate={true} />,
+      signer: <AddressLink addr={signer} truncate={true} allowLinkToSelf={false} />,
       action: <ExtrinsicAction section={section} name={name} />,
       args,
       key: hash

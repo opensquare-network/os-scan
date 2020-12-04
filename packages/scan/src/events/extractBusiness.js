@@ -7,7 +7,7 @@ async function extractEventBusinessData(event, indexer) {
 
   if (sections.bounties === section) {
     await handleBountiesEvent(event, indexer)
-  } else if (sections.balance === section) {
+  } else if (sections.balances === section) {
     await handleBalanceEvent(event, indexer)
   } else if (sections.currencies === section) {
     await handleCurrenciesEvent(event, indexer)

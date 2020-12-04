@@ -2,6 +2,7 @@ const { extractExtrinsicEvents } = require("../utils");
 const { getExtrinsicCollection } = require("../mongo");
 const { isExtrinsicSuccess } = require("../utils");
 const { u8aToHex } = require('@polkadot/util')
+const { sections } = require("../utils/consants");
 
 async function handleExtrinsics(extrinsics = [], allEvents = [], indexer) {
   let index = 0
@@ -43,6 +44,8 @@ async function handleExtrinsic(extrinsic, indexer, events) {
   const version = extrinsic.version
   const data = u8aToHex(extrinsic.data) // 原始数据
 
+  const stakeholders = extractStakeHolders(events, signer)
+
   const doc = {
     hash,
     indexer,
@@ -53,7 +56,10 @@ async function handleExtrinsic(extrinsic, indexer, events) {
     version,
     args,
     data,
-    isSuccess
+    isSuccess,
+    connect: {
+      stakeholders
+    },
   }
 
   const exCol = await getExtrinsicCollection()
@@ -61,6 +67,41 @@ async function handleExtrinsic(extrinsic, indexer, events) {
   if (result.result && !result.result.ok) {
     // FIXME: 处理交易插入不成功的情况
   }
+}
+
+function extractStakeHolders(events, signer) {
+  let stakeholders = new Set([signer])
+
+  for (let i = 0; i < events.length; i++) {
+    const { event } = events[i]
+    const section = event.section
+    const method = event.method
+    const data = event.data.toJSON()
+
+    if (section === sections.bounties) {
+      if (method === 'AssignBounty') {
+        const [bountyId, accountId] = data
+        stakeholders.add(accountId)
+      }
+    } else if (section === sections.reputation) {
+      if (method === 'ReputationAdded') {
+        const [accountId, reputation] = data
+        stakeholders.add(accountId)
+      }
+    } else if (section === sections.balances) {
+      if (method === 'Transfer') {
+        const [from, to, balance] = data
+        stakeholders.add(from)
+        stakeholders.add(to)
+      } else if (method === 'ReserveRepatriated') {
+        const [from, to, balance] = data
+        stakeholders.add(from)
+        stakeholders.add(to)
+      }
+    }
+  }
+
+  return Array.from(stakeholders)
 }
 
 module.exports = {
