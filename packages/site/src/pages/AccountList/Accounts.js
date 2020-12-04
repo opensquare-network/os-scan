@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { accountListSelector, fetchAccounts, fetchAccountsLoading } from "@store/reducers/accountSlice";
 import Table from "antd/lib/table";
 import { columns } from "@pages/AccountList/const";
-import { AddressLink } from "@components/index";
+import { AddressLink, Balance } from "@components/index";
 
 export default function Accounts() {
   const [tablePage, setTablePage] = useState(1)
@@ -11,8 +11,6 @@ export default function Accounts() {
   const loading = useSelector(fetchAccountsLoading)
 
   const dispatch = useDispatch()
-  const tmp = useSelector(accountListSelector)
-  console.log(tmp)
   const { items: accounts, page, pageSize, total } = useSelector(accountListSelector)
 
   const dataSource = accounts.map(account => {
@@ -21,7 +19,7 @@ export default function Accounts() {
     return {
       address: <AddressLink addr={address} truncate={false} />,
       type,
-      balance,
+      balance: <Balance value={balance?.free} align="right"/>,
       key: address
     }
   })

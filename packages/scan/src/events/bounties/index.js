@@ -1,5 +1,7 @@
 const { handleCancelHuntBounty } = require("./bountyHunters");
 const { handleHuntBounty } = require("./bountyHunters");
+const { handleAssignBounty } = require("./bountyHunters");
+const { handleResign } = require("./bountyHunters");
 const { safeBlocks } = require("../../utils/consants");
 const { getBountyStateCollection } = require("../../mongo");
 const { getApi } = require("../../api");
@@ -28,12 +30,15 @@ async function handleBountiesEvent(event, indexer) {
 
   if ('ApplyBounty' === method) {
     await saveNewBounty(jsonData, indexer)
-    await saveAccount(jsonData[0])
   } else if ('HuntBounty' === method) {
     await handleHuntBounty(jsonData, indexer)
     await saveAccount(jsonData[1])
   } else if ('CancelHuntBounty' === method) {
     await handleCancelHuntBounty(jsonData, indexer)
+  } else if ('AssignBounty' === method) {
+    await handleAssignBounty(jsonData, indexer)
+  } else if ('Resign') {
+    await handleResign(jsonData, indexer)
   }
 
   if (isStateChange(method)) {
@@ -42,6 +47,9 @@ async function handleBountiesEvent(event, indexer) {
 }
 
 async function saveAccount(address) {
+  const api = await getApi()
+  let { data } = await api.query.system.account(address);
+
   const accountCol = await getAccountCollection()
   await accountCol.updateOne({ address }, {
     $setOnInsert: {
@@ -49,7 +57,7 @@ async function saveAccount(address) {
       type: 'sr25519',
     },
     $set: {
-      balance: null
+      balance: data.toJSON()
     }
   }, { upsert: true })
 }
@@ -82,6 +90,18 @@ async function saveBountyState(method, json, indexer) {
     bountyId,
     state: state.toJSON(),
     data: json
+  })
+
+  // Also update the latest bounty state to bounty collection
+  const bountyCol = await getBountyCollection()
+  await bountyCol.updateOne({ bountyId }, {
+    $set: {
+      state: {
+        indexer,
+        state: state.toJSON(),
+        data: json
+      }
+    }
   })
 
   // TODO: handle same business record in one height

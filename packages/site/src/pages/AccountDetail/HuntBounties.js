@@ -27,9 +27,7 @@ export default function HuntBounties() {
     }
   }, [dispatch, address, tablePage, tablePageSize])
 
-  let tmp = useSelector(huntBountiesSelector)
-  console.log(tmp)
-  const { items: bounties, page, pageSize, total } = tmp
+  const { items: bounties, page, pageSize, total } = useSelector(huntBountiesSelector)
   const loading = useSelector(fetchHuntBountiesLoadingSelector)
 
   const dataSource = (bounties || []).map(bounty => {

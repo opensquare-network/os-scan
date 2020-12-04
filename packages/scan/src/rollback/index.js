@@ -51,12 +51,38 @@ async function deleteBountiesFrom(blockHeight) {
 
 async function deleteBountyStateFrom(blockHeight) {
   const bountyStateCol = await getBountyStateCollection()
+
+  // Remember the affected bounties
+  const affectedBounties = await bountyStateCol.distinct('bountyId', { 'indexer.blockHeight': { $gte: blockHeight } })
+  // Then we do rollback
   await bountyStateCol.deleteMany({ 'indexer.blockHeight': { $gte: blockHeight } })
+  // Update bounty state for affected bounties after deletion
+  const bountyCol = await getBountyCollection()
+  for (let bountyId of affectedBounties) {
+    const state = await bountyStateCol.findOne({ bountyId }, {
+      sort: [['indexer.blockHeight', -1]],
+      projection: { _id: 0, bountyId: 0 }
+    })
+    await bountyCol.updateOne({ bountyId }, { $set: { state } })
+  }
 }
 
 async function deleteBountyHuntersFrom(blockHeight) {
   const bountyHuntersCol = await getBountyHuntersCollection()
+
+  // Remember the affected bounties
+  const affectedBounties = await bountyHuntersCol.distinct('bountyId', { 'indexer.blockHeight': { $gte: blockHeight } })
+  // Then we do rollback
   await bountyHuntersCol.deleteMany({ 'indexer.blockHeight': { $gte: blockHeight } })
+  // Update bounty state for affected bounties after deletion
+  const bountyCol = await getBountyCollection()
+  for (let bountyId of affectedBounties) {
+    const hunters = await bountyHuntersCol.findOne({ bountyId }, {
+      sort: [['indexer.blockHeight', -1]],
+      projection: { _id: 0, bountyId: 0 }
+    })
+    await bountyCol.updateOne({ bountyId }, { $set: { hunters } })
+  }
 }
 
 module.exports = {

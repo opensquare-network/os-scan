@@ -1,5 +1,5 @@
 const { safeBlocks } = require("../../utils/consants");
-const { getBountyHuntersCollection } = require("../../mongo");
+const { getBountyHuntersCollection, getBountyCollection } = require("../../mongo");
 
 async function handleHuntBounty(json, indexer) {
   const [bountyId, accountId] = json
@@ -7,13 +7,8 @@ async function handleHuntBounty(json, indexer) {
 
   const records = await bountyHuntersCol.find({ bountyId }).sort({ 'indexer.blockHeight': -1 }).limit(1).toArray()
   let hunters = records.length > 0 ? [...records[0].hunters, { accountId, indexer }] : [{ accountId, indexer }]
-  await bountyHuntersCol.insertOne({
-    indexer,
-    bountyId,
-    hunters
-  })
-
-  await removeUselessHistoryRecords(bountyId, indexer)
+  let assignee = records.length > 0 ? records[0].assignee : null
+  await saveBountyHunters(bountyId, hunters, assignee, indexer)
 }
 
 async function handleCancelHuntBounty(json, indexer) {
@@ -26,10 +21,60 @@ async function handleCancelHuntBounty(json, indexer) {
   }
 
   let hunters = records[0].hunters.filter(hunter => hunter.accountId !== accountId)
+  let assignee = records[0].assignee
+  await saveBountyHunters(bountyId, hunters, assignee, indexer)
+}
+
+async function handleAssignBounty(json, indexer) {
+  const [bountyId, accountId] = json
+  const bountyHuntersCol = await getBountyHuntersCollection()
+  const records = await bountyHuntersCol.find({ bountyId }).sort({ 'indexer.blockHeight': -1 }).limit(1).toArray()
+
+  if (records.length <= 0) {
+    return
+  }
+
+  let hunters = records[0].hunters
+  let assignee = {
+    accountId,
+    indexer,
+  }
+  await saveBountyHunters(bountyId, hunters, assignee, indexer)
+}
+
+async function handleResign(json, indexer) {
+  const [bountyId, accountId] = json
+  const bountyHuntersCol = await getBountyHuntersCollection()
+  const records = await bountyHuntersCol.find({ bountyId }).sort({ 'indexer.blockHeight': -1 }).limit(1).toArray()
+
+  if (records.length <= 0) {
+    return
+  }
+
+  let hunters = records[0].hunters.filter(hunter => hunter.accountId !== accountId)
+  let assignee = null
+  await saveBountyHunters(bountyId, hunters, assignee, indexer)
+}
+
+async function saveBountyHunters(bountyId, hunters, assignee, indexer) {
+  const bountyHuntersCol = await getBountyHuntersCollection()
   await bountyHuntersCol.insertOne({
     indexer,
     bountyId,
-    hunters
+    hunters,
+    assignee,
+  })
+
+  // Also update the latest bounty hunters to bounty collection
+  const bountyCol = await getBountyCollection()
+  await bountyCol.updateOne({ bountyId }, {
+    $set: {
+      hunters: {
+        indexer,
+        hunters,
+        assignee,
+      }
+    }
   })
 
   await removeUselessHistoryRecords(bountyId, indexer)
@@ -53,5 +98,7 @@ async function removeUselessHistoryRecords(bountyId, indexer) {
 
 module.exports = {
   handleHuntBounty,
-  handleCancelHuntBounty
+  handleCancelHuntBounty,
+  handleAssignBounty,
+  handleResign,
 }

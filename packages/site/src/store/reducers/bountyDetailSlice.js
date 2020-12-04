@@ -8,8 +8,9 @@ const bountyDetailSlice = createSlice({
     bounty: null,
     loading: false,
     hunters: [],
-    content: null,
     loadingHunters: false,
+    content: null,
+    loadingBountyContent: false,
   },
   reducers: {
     setBounty(state, { payload }) {
@@ -21,11 +22,14 @@ const bountyDetailSlice = createSlice({
     setHunters(state, { payload }) {
       state.hunters = payload
     },
+    setLoadingHunters(state, { payload }) {
+      state.loadingHunters = payload
+    },
     setBountyContent(state, { payload }) {
       state.content = payload
     },
-    setLoadingHunters(state, { payload }) {
-      state.loadingHunters = payload
+    setLoadingBountyContent(state, { payload }) {
+      state.loadingBountyContent = payload
     },
   }
 })
@@ -34,8 +38,9 @@ export const {
   setBounty,
   setLoading,
   setHunters,
-  setBountyContent,
   setLoadingHunters,
+  setBountyContent,
+  setLoadingBountyContent,
 } = bountyDetailSlice.actions
 
 export const fetchBounty = bountyId => async dispatch => {
@@ -59,17 +64,19 @@ export const fetchBountyHunters = bountyId => async dispatch => {
 }
 
 export const fetchBountyContent = contentHash => async dispatch => {
-  dispatch(setLoading(true))
+  dispatch(setLoadingBountyContent(true))
   try {
     const { result } = await contentApi.fetch(`/content/${contentHash}`)
     dispatch(setBountyContent(result))
   } finally {
-    dispatch(setLoading(false))
+    dispatch(setLoadingBountyContent(false))
   }
 }
 
 export const bountyDetailSelector = state => state.bountyDetail.bounty
+export const fetchBountyDetailLoadingSelector = state => state.bountyDetail.loading
 export const bountyHunterSelector = state => state.bountyDetail.hunters
-export const bountyContentSelector = state => state.bountyDetail.content
 export const fetchHuntersLoadingSelector = state => state.bountyDetail.loadingHunters
+export const bountyContentSelector = state => state.bountyDetail.content
+export const fetchBountyContentLoadingSelector = state => state.bountyDetail.loadingBountyContent
 export default bountyDetailSlice.reducer

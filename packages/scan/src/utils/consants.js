@@ -1,6 +1,7 @@
 const sections = {
   bounties: 'osBounties',
-  currencies: 'currencies'
+  currencies: 'currencies',
+  balance: 'balances',
 }
 
 const safeBlocks = 300
