@@ -22,7 +22,7 @@ function isStateChange(method) {
   ].includes(method)
 }
 
-async function handleBountiesEvent(event, indexer) {
+async function handleBountiesEvent(event, indexer, eventSort) {
   const { method, data } = event
   const jsonData = data.toJSON()
 
@@ -31,18 +31,18 @@ async function handleBountiesEvent(event, indexer) {
   if ('ApplyBounty' === method) {
     await saveNewBounty(jsonData, indexer)
   } else if ('HuntBounty' === method) {
-    await handleHuntBounty(jsonData, indexer)
+    await handleHuntBounty(jsonData, indexer, eventSort)
     await saveAccount(jsonData[1])
   } else if ('CancelHuntBounty' === method) {
-    await handleCancelHuntBounty(jsonData, indexer)
+    await handleCancelHuntBounty(jsonData, indexer, eventSort)
   } else if ('AssignBounty' === method) {
-    await handleAssignBounty(jsonData, indexer)
-  } else if ('Resign') {
-    await handleResign(jsonData, indexer)
+    await handleAssignBounty(jsonData, indexer, eventSort)
+  } else if ('Resign' === method) {
+    await handleResign(jsonData, indexer, eventSort)
   }
 
   if (isStateChange(method)) {
-    await saveBountyState(method, jsonData, indexer)
+    await saveBountyState(method, jsonData, indexer, eventSort)
   }
 }
 
@@ -78,7 +78,7 @@ async function saveNewBounty(json, indexer) {
   // FIXME: handle insertion failure
 }
 
-async function saveBountyState(method, json, indexer) {
+async function saveBountyState(method, json, indexer, sort) {
   const bountyId = json['ApplyBounty' === method ? 1 : 0]
 
   const api = await getApi()
@@ -87,6 +87,7 @@ async function saveBountyState(method, json, indexer) {
   const bountyStateCol = await getBountyStateCollection()
   await bountyStateCol.insertOne({
     indexer,
+    sort,
     bountyId,
     state: state.toJSON(),
     data: json
@@ -98,6 +99,7 @@ async function saveBountyState(method, json, indexer) {
     $set: {
       state: {
         indexer,
+        sort,
         state: state.toJSON(),
         data: json
       }

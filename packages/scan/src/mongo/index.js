@@ -10,7 +10,6 @@ const bountyCollectionName = 'bounty'
 const bountyStateCollectionName = 'bountyState'
 const bountyHuntersCollectionName = 'bountyHunters'
 const accountCollectionName = 'account'
-const accountExtrinsicCollectionName = 'accountExtrinsic'
 
 let client = null
 let db = null
@@ -23,7 +22,6 @@ let bountyCol = null
 let bountyStateCol = null
 let bountyHuntersCol = null
 let accountCol = null
-let accountExtrinsicCol = null
 
 const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost:27017'
 
@@ -42,7 +40,6 @@ async function initDb() {
   bountyStateCol = db.collection(bountyStateCollectionName)
   bountyHuntersCol = db.collection(bountyHuntersCollectionName)
   accountCol = db.collection(accountCollectionName)
-  accountExtrinsicCol = db.collection(accountExtrinsicCollectionName)
 
   await _createIndexes()
 }
@@ -53,7 +50,29 @@ async function _createIndexes() {
     process.exit(1)
   }
 
-  // TODO: create indexes for DB collections
+  blockCol.createIndex({ hash: 1 }, { unique: true })
+  blockCol.createIndex({ 'header.number': -1 })
+
+  extrinsicCol.createIndex({ hash: 1 }, { unique: true })
+  extrinsicCol.createIndex({ 'indexer.blockHeight': -1 })
+  extrinsicCol.createIndex({ 'indexer.blockHash': 1 })
+  extrinsicCol.createIndex({ 'connect.stakeholders': 1 }, { sparse: true })
+
+  eventCol.createIndex({ 'indexer.blockHeight': -1, sort: -1 }, { unique: true })
+  eventCol.createIndex({ extrinsicHash: 1, sort: -1 })
+
+  bountyCol.createIndex({ bountyId: 1 }, { unique: true })
+  bountyCol.createIndex({ 'indexer.blockHeight': -1 })
+  bountyCol.createIndex({ creator: 1 })
+  bountyCol.createIndex({ 'hunters.hunters.accountId': 1 }, { sparse: true })
+
+  bountyStateCol.createIndex({ bountyId: 1, 'indexer.blockHeight': -1, sort: -1 }, { unique: true })
+  bountyStateCol.createIndex({ 'indexer.blockHeight': -1 })
+
+  bountyHuntersCol.createIndex({ bountyId: 1, 'indexer.blockHeight': -1, sort: -1 }, { unique: true })
+  bountyHuntersCol.createIndex({ 'indexer.blockHeight': -1 })
+
+  accountCol.createIndex({ address: 1 }, { unique: true })
 }
 
 async function tryInit(col) {
@@ -102,11 +121,6 @@ async function getAccountCollection() {
   return accountCol
 }
 
-async function getAccountExtrinsicCollection() {
-  await tryInit(accountExtrinsicCol)
-  return accountExtrinsicCol
-}
-
 module.exports = {
   getBlockCollection,
   getStatusCollection,
@@ -116,5 +130,4 @@ module.exports = {
   getBountyStateCollection,
   getBountyHuntersCollection,
   getAccountCollection,
-  getAccountExtrinsicCollection,
 }

@@ -1,20 +1,29 @@
 const { safeBlocks } = require("../../utils/consants");
 const { getBountyHuntersCollection, getBountyCollection } = require("../../mongo");
 
-async function handleHuntBounty(json, indexer) {
+async function handleHuntBounty(json, indexer, sort) {
   const [bountyId, accountId] = json
   const bountyHuntersCol = await getBountyHuntersCollection()
 
-  const records = await bountyHuntersCol.find({ bountyId }).sort({ 'indexer.blockHeight': -1 }).limit(1).toArray()
+  const records = await bountyHuntersCol
+    .find({ bountyId })
+    .sort({ 'indexer.blockHeight': -1, sort: -1 })
+    .limit(1)
+    .toArray()
   let hunters = records.length > 0 ? [...records[0].hunters, { accountId, indexer }] : [{ accountId, indexer }]
   let assignee = records.length > 0 ? records[0].assignee : null
-  await saveBountyHunters(bountyId, hunters, assignee, indexer)
+  await saveBountyHunters(bountyId, hunters, assignee, indexer, sort)
 }
 
-async function handleCancelHuntBounty(json, indexer) {
+async function handleCancelHuntBounty(json, indexer, sort) {
   const [bountyId, accountId] = json
   const bountyHuntersCol = await getBountyHuntersCollection()
-  const records = await bountyHuntersCol.find({ bountyId }).sort({ 'indexer.blockHeight': -1 }).limit(1).toArray()
+  const records = await bountyHuntersCol
+    .find({ bountyId })
+    .sort({ 'indexer.blockHeight': -1, sort: -1 })
+    .limit(1)
+    .toArray()
+
 
   if (records.length <= 0) {
     return
@@ -22,13 +31,17 @@ async function handleCancelHuntBounty(json, indexer) {
 
   let hunters = records[0].hunters.filter(hunter => hunter.accountId !== accountId)
   let assignee = records[0].assignee
-  await saveBountyHunters(bountyId, hunters, assignee, indexer)
+  await saveBountyHunters(bountyId, hunters, assignee, indexer, sort)
 }
 
-async function handleAssignBounty(json, indexer) {
+async function handleAssignBounty(json, indexer, sort) {
   const [bountyId, accountId] = json
   const bountyHuntersCol = await getBountyHuntersCollection()
-  const records = await bountyHuntersCol.find({ bountyId }).sort({ 'indexer.blockHeight': -1 }).limit(1).toArray()
+  const records = await bountyHuntersCol
+    .find({ bountyId })
+    .sort({ 'indexer.blockHeight': -1, sort: -1 })
+    .limit(1)
+    .toArray()
 
   if (records.length <= 0) {
     return
@@ -39,13 +52,17 @@ async function handleAssignBounty(json, indexer) {
     accountId,
     indexer,
   }
-  await saveBountyHunters(bountyId, hunters, assignee, indexer)
+  await saveBountyHunters(bountyId, hunters, assignee, indexer, sort)
 }
 
-async function handleResign(json, indexer) {
+async function handleResign(json, indexer, sort) {
   const [bountyId, accountId] = json
   const bountyHuntersCol = await getBountyHuntersCollection()
-  const records = await bountyHuntersCol.find({ bountyId }).sort({ 'indexer.blockHeight': -1 }).limit(1).toArray()
+  const records = await bountyHuntersCol
+    .find({ bountyId })
+    .sort({ 'indexer.blockHeight': -1, sort: -1 })
+    .limit(1)
+    .toArray()
 
   if (records.length <= 0) {
     return
@@ -53,13 +70,14 @@ async function handleResign(json, indexer) {
 
   let hunters = records[0].hunters.filter(hunter => hunter.accountId !== accountId)
   let assignee = null
-  await saveBountyHunters(bountyId, hunters, assignee, indexer)
+  await saveBountyHunters(bountyId, hunters, assignee, indexer, sort)
 }
 
-async function saveBountyHunters(bountyId, hunters, assignee, indexer) {
+async function saveBountyHunters(bountyId, hunters, assignee, indexer, sort) {
   const bountyHuntersCol = await getBountyHuntersCollection()
   await bountyHuntersCol.insertOne({
     indexer,
+    sort,
     bountyId,
     hunters,
     assignee,
@@ -71,6 +89,7 @@ async function saveBountyHunters(bountyId, hunters, assignee, indexer) {
     $set: {
       hunters: {
         indexer,
+        sort,
         hunters,
         assignee,
       }

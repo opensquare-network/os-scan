@@ -60,7 +60,7 @@ async function deleteBountyStateFrom(blockHeight) {
   const bountyCol = await getBountyCollection()
   for (let bountyId of affectedBounties) {
     const state = await bountyStateCol.findOne({ bountyId }, {
-      sort: [['indexer.blockHeight', -1]],
+      sort: [['indexer.blockHeight', -1], ['sort', -1]],
       projection: { _id: 0, bountyId: 0 }
     })
     await bountyCol.updateOne({ bountyId }, { $set: { state } })
@@ -78,7 +78,7 @@ async function deleteBountyHuntersFrom(blockHeight) {
   const bountyCol = await getBountyCollection()
   for (let bountyId of affectedBounties) {
     const hunters = await bountyHuntersCol.findOne({ bountyId }, {
-      sort: [['indexer.blockHeight', -1]],
+      sort: [['indexer.blockHeight', -1], ['sort', -1]],
       projection: { _id: 0, bountyId: 0 }
     })
     await bountyCol.updateOne({ bountyId }, { $set: { hunters } })
