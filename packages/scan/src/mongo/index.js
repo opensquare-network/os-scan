@@ -71,6 +71,7 @@ async function _createIndexes() {
   bountyCol.createIndex({ 'indexer.blockHeight': -1 })
   bountyCol.createIndex({ creator: 1, 'indexer.blockHeight': -1 })
   bountyCol.createIndex({ 'hunters.hunters.accountId': 1 }, { sparse: true })
+  bountyCol.createIndex({ 'state.state': 1 }, { sparse: true })
 
   bountyStateCol.createIndex({ bountyId: 1, 'indexer.blockHeight': -1, sort: -1 }, { unique: true })
   bountyStateCol.createIndex({ 'indexer.blockHeight': -1 })
