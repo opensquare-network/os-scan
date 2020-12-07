@@ -32,7 +32,9 @@ async function handleBountiesEvent(event, indexer, eventSort) {
     await saveNewBounty(jsonData, indexer)
   } else if ('HuntBounty' === method) {
     await handleHuntBounty(jsonData, indexer, eventSort)
-    await saveAccount(jsonData[1], indexer)
+
+    const accountId = jsonData[1]
+    await saveAccount(accountId, indexer)
   } else if ('CancelHuntBounty' === method) {
     await handleCancelHuntBounty(jsonData, indexer, eventSort)
   } else if ('AssignBounty' === method) {

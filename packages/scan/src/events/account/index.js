@@ -8,7 +8,6 @@ async function saveAccount(address, indexer) {
     $setOnInsert: {
       indexer,
       address,
-      type: 'sr25519',
     }
   }, { upsert: true })
 }

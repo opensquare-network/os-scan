@@ -13,10 +13,6 @@ export default function Panel() {
       data: account?.address
     },
     {
-      label: 'Address Type',
-      data: account?.type
-    },
-    {
       label: 'Balance',
       data: <Balance value={account?.balance?.free}/>
     },

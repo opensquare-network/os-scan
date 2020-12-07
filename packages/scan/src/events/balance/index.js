@@ -14,11 +14,11 @@ async function handleBalanceEvent(event, indexer, sort) {
     await saveAccount(accountId, indexer)
     await saveAccountBalance(accountId, indexer, sort)
   } else if (method === 'ReserveRepatriated') {
-    const [accountId1, accountId2, balance] = jsonData
-    await saveAccount(accountId1, indexer)
-    await saveAccountBalance(accountId1, indexer, sort)
-    await saveAccount(accountId2, indexer)
-    await saveAccountBalance(accountId2, indexer, sort)
+    const [from, to, balance] = jsonData
+    await saveAccount(from, indexer)
+    await saveAccountBalance(from, indexer, sort)
+    await saveAccount(to, indexer)
+    await saveAccountBalance(to, indexer, sort)
   }
 }
 
@@ -27,11 +27,11 @@ async function handleCurrenciesEvent(event, indexer, sort) {
   const jsonData = data.toJSON()
 
   if (method === 'Transferred') {
-    const [currencyId, accountId1, accountId2, balance] = jsonData
-    await saveAccount(accountId1, indexer)
-    await saveAccountBalance(accountId1, indexer, sort)
-    await saveAccount(accountId2, indexer)
-    await saveAccountBalance(accountId2, indexer, sort)
+    const [currencyId, from, to, balance] = jsonData
+    await saveAccount(from, indexer)
+    await saveAccountBalance(from, indexer, sort)
+    await saveAccount(to, indexer)
+    await saveAccountBalance(to, indexer, sort)
   }
 }
 
