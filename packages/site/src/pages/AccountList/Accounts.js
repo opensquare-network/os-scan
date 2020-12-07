@@ -14,7 +14,7 @@ export default function Accounts() {
   const { items: accounts, page, pageSize, total } = useSelector(accountListSelector)
 
   const dataSource = accounts.map(account => {
-    const { address, type, balance, reputation } = account
+    const { address, balance, reputation } = account
 
     return {
       address: <AddressLink addr={address} truncate={false} />,
