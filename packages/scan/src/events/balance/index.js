@@ -1,46 +1,60 @@
 const { getApi } = require("../../api");
-const { getAccountCollection } = require("../../mongo");
+const { saveAccount } = require('../account');
+const {
+  getAccountCollection,
+  getAccountBalanceCollection,
+} = require("../../mongo");
 
-
-async function handleBalanceEvent(event, indexer) {
+async function handleBalanceEvent(event, indexer, sort) {
   const { method, data } = event
   const jsonData = data.toJSON()
 
   if (method === 'Reserved') {
     const [accountId, balance] = jsonData
-    await saveAccount(accountId)
+    await saveAccount(accountId, indexer)
+    await saveAccountBalance(accountId, indexer, sort)
   } else if (method === 'ReserveRepatriated') {
-    const [accountId1, accountId2, balance] = jsonData
-    await saveAccount(accountId1)
-    await saveAccount(accountId2)
+    const [from, to, balance] = jsonData
+    await saveAccount(from, indexer)
+    await saveAccountBalance(from, indexer, sort)
+    await saveAccount(to, indexer)
+    await saveAccountBalance(to, indexer, sort)
   }
 }
 
-async function handleCurrenciesEvent(event, indexer) {
+async function handleCurrenciesEvent(event, indexer, sort) {
   const { method, data } = event
   const jsonData = data.toJSON()
 
   if (method === 'Transferred') {
-    const [currencyId, accountId1, accountId2, balance] = jsonData
-    await saveAccount(accountId1)
-    await saveAccount(accountId2)
+    const [currencyId, from, to, balance] = jsonData
+    await saveAccount(from, indexer)
+    await saveAccountBalance(from, indexer, sort)
+    await saveAccount(to, indexer)
+    await saveAccountBalance(to, indexer, sort)
   }
 }
 
-async function saveAccount(address) {
+async function saveAccountBalance(address, indexer, sort) {
   const api = await getApi()
   let { data } = await api.query.system.account(address);
+  const balance = data.toJSON()
+
+  const accountBalanceCol = await getAccountBalanceCollection()
+  await accountBalanceCol.insertOne({
+    indexer,
+    sort,
+    address,
+    balance,
+  })
 
   const accountCol = await getAccountCollection()
   await accountCol.updateOne({ address }, {
-    $setOnInsert: {
-      address,
-      type: 'sr25519',
-    },
     $set: {
-      balance: data.toJSON()
+      balance,
     }
-  }, { upsert: true })
+  })
+
 }
 
 module.exports = {

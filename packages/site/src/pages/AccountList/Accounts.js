@@ -14,11 +14,11 @@ export default function Accounts() {
   const { items: accounts, page, pageSize, total } = useSelector(accountListSelector)
 
   const dataSource = accounts.map(account => {
-    const { address, type, balance } = account
+    const { address, balance, reputation } = account
 
     return {
       address: <AddressLink addr={address} truncate={false} />,
-      type,
+      reputation,
       balance: <Balance value={balance?.free} align="right"/>,
       key: address
     }

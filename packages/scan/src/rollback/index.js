@@ -4,6 +4,11 @@ const { getBountyHuntersCollection } = require("../mongo");
 const { getBountyStateCollection } = require("../mongo");
 const { getBountyCollection } = require("../mongo");
 const { getBlockCollection } = require("../mongo");
+const {
+  getAccountCollection,
+  getAccountBalanceCollection,
+  getAccountReputationCollection,
+} = require("../mongo");
 const { getApi } = require("../api");
 
 async function findNonForkHeight(nowHeight) {
@@ -32,6 +37,9 @@ async function deleteDataFrom(blockHeight) {
   await deleteBountiesFrom(blockHeight)
   await deleteBountyStateFrom(blockHeight)
   await deleteBountyHuntersFrom(blockHeight)
+  await deleteAccountsFrom(blockHeight)
+  await deleteAccountBalanceFrom(blockHeight)
+  await deleteAccountReputationFrom(blockHeight)
 }
 
 async function deleteExtrinsicsFrom(blockHeight) {
@@ -82,6 +90,47 @@ async function deleteBountyHuntersFrom(blockHeight) {
       projection: { _id: 0, bountyId: 0 }
     })
     await bountyCol.updateOne({ bountyId }, { $set: { hunters } })
+  }
+}
+
+async function deleteAccountsFrom(blockHeight) {
+  const accountCol = await getAccountCollection()
+  await accountCol.deleteMany({ 'indexer.blockHeight': { $gte: blockHeight } })
+}
+
+async function deleteAccountBalanceFrom(blockHeight) {
+  const accountBalanceCol = await getAccountBalanceCollection()
+
+  // Remember the affected accounts
+  const affectedAddresses = await accountBalanceCol.distinct('address', { 'indexer.blockHeight': { $gte: blockHeight } })
+  // Then we do rollback
+  await accountBalanceCol.deleteMany({ 'indexer.blockHeight': { $gte: blockHeight } })
+  // Update state for affected accounts after deletion
+  const accountCol = await getAccountCollection()
+  for (let address of affectedAddresses) {
+    const accountBalance = await accountBalanceCol.findOne({ address }, {
+      sort: [['indexer.blockHeight', -1], ['sort', -1]],
+    })
+    let balance = accountBalance && accountBalance.balance || null
+    await accountCol.updateOne({ address }, { $set: { balance } })
+  }
+}
+
+async function deleteAccountReputationFrom(blockHeight) {
+  const accountReputationCol = await getAccountReputationCollection()
+
+  // Remember the affected accounts
+  const affectedAddresses = await accountReputationCol.distinct('address', { 'indexer.blockHeight': { $gte: blockHeight } })
+  // Then we do rollback
+  await accountReputationCol.deleteMany({ 'indexer.blockHeight': { $gte: blockHeight } })
+  // Update state for affected accounts after deletion
+  const accountCol = await getAccountCollection()
+  for (let address of affectedAddresses) {
+    const accountReputation = await accountReputationCol.findOne({ address }, {
+      sort: [['indexer.blockHeight', -1], ['sort', -1]],
+    })
+    let reputation = accountReputation && accountReputation.reputation || null
+    await accountCol.updateOne({ address }, { $set: { reputation } })
   }
 }
 

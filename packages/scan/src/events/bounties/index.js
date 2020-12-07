@@ -6,7 +6,7 @@ const { safeBlocks } = require("../../utils/consants");
 const { getBountyStateCollection } = require("../../mongo");
 const { getApi } = require("../../api");
 const { getBountyCollection } = require("../../mongo");
-const { getAccountCollection } = require("../../mongo");
+const { saveAccount } = require("../account");
 
 function isStateChange(method) {
   return [
@@ -32,7 +32,9 @@ async function handleBountiesEvent(event, indexer, eventSort) {
     await saveNewBounty(jsonData, indexer)
   } else if ('HuntBounty' === method) {
     await handleHuntBounty(jsonData, indexer, eventSort)
-    await saveAccount(jsonData[1])
+
+    const accountId = jsonData[1]
+    await saveAccount(accountId, indexer)
   } else if ('CancelHuntBounty' === method) {
     await handleCancelHuntBounty(jsonData, indexer, eventSort)
   } else if ('AssignBounty' === method) {
@@ -44,22 +46,6 @@ async function handleBountiesEvent(event, indexer, eventSort) {
   if (isStateChange(method)) {
     await saveBountyState(method, jsonData, indexer, eventSort)
   }
-}
-
-async function saveAccount(address) {
-  const api = await getApi()
-  let { data } = await api.query.system.account(address);
-
-  const accountCol = await getAccountCollection()
-  await accountCol.updateOne({ address }, {
-    $setOnInsert: {
-      address,
-      type: 'sr25519',
-    },
-    $set: {
-      balance: data.toJSON()
-    }
-  }, { upsert: true })
 }
 
 async function saveNewBounty(json, indexer) {
