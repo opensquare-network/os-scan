@@ -19,7 +19,7 @@ export default function Accounts() {
     return {
       address: <AddressLink addr={address} truncate={false} />,
       reputation,
-      balance: <Balance value={balance?.free} align="right"/>,
+      balance: <Balance value={balance?.free} />,
       key: address
     }
   })

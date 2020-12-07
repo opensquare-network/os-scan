@@ -1,6 +1,7 @@
-import BN from 'bignumber.js';
 import React from "react";
 import styled from "styled-components"
+import toPrecision from "../utils/toPrecision";
+import { osnPrecision } from "../utils/constants";
 
 export default function Balance({ value, align = 'left' }) {
   if (value === null || typeof value === 'undefined') {
@@ -14,7 +15,7 @@ export default function Balance({ value, align = 'left' }) {
 
   return (
     <Wrapper>
-      {new BN(value.toString()).div(1000000000).toFixed(4).toString()} OSN
+      {toPrecision(value, osnPrecision, osnPrecision)} OSN
     </Wrapper>
   )
 }
