@@ -20,6 +20,10 @@ export default function Panel() {
       label: 'Balance',
       data: <Balance value={account?.balance?.free}/>
     },
+    {
+      label: 'Reputation',
+      data: account?.reputation
+    },
   ]
 
   return (
