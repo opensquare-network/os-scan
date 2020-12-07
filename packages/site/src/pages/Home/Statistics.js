@@ -24,9 +24,6 @@ const Wrapper = styled.div`
     flex-shrink: 3;
     flex-basis: 30%;
 
-    &:not(:first-of-type) {
-    }
-
     & > div.title {
       line-height: 1.5;
       font-weight: bold;
