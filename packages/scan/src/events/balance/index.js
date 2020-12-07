@@ -37,7 +37,7 @@ async function handleCurrenciesEvent(event, indexer, sort) {
 
 async function saveAccountBalance(address, indexer, sort) {
   const api = await getApi()
-  let { data } = await api.query.system.account(address);
+  let { data } = await api.query.system.account.at(indexer.blockHash, address);
   const balance = data.toJSON()
 
   const accountBalanceCol = await getAccountBalanceCollection()
@@ -60,4 +60,5 @@ async function saveAccountBalance(address, indexer, sort) {
 module.exports = {
   handleBalanceEvent,
   handleCurrenciesEvent,
+  saveAccountBalance,
 }
