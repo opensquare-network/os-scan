@@ -5,15 +5,14 @@ const {
   getAccountReputationCollection,
 } = require("../../mongo");
 
-
 async function handleReputationEvent(event, indexer, sort) {
   const { method, data } = event
   const jsonData = data.toJSON()
 
   if (method === 'ReputationAdded') {
-    const [accountId, reputation] = jsonData
-    await saveAccount(accountId, indexer)
-    await saveAccountReputation(accountId, indexer, sort)
+    const [address, reputation] = jsonData
+    await saveAccount(address, indexer)
+    await saveAccountReputation(address, indexer, sort)
   }
 }
 

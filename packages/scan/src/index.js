@@ -1,3 +1,4 @@
+const { initGenesisData } = require("./genesis");
 const { handleExtrinsics } = require("./extrinsic");
 const { handleEvents } = require("./events");
 const { getBlockIndexer } = require("./block/getBlockIndexer");
@@ -56,12 +57,16 @@ async function main() {
       continue
     }
 
+    const blockIndexer = getBlockIndexer(block.block)
+    if (scanHeight <= 1) {
+      await initGenesisData(blockIndexer)
+    }
+
     const allEvents = await api.query.system.events.at(blockHash)
     await handleBlock(block, allEvents)
     preBlockHash = block.block.hash.toHex()
     console.log(`block ${(block.block.header.number.toNumber())} is saved to db`)
 
-    const blockIndexer = getBlockIndexer(block.block)
     await handleEvents(allEvents, blockIndexer, block.block.extrinsics)
     await handleExtrinsics(block.block.extrinsics, allEvents, blockIndexer)
 
@@ -71,7 +76,8 @@ async function main() {
 
 main().then(() => console.log('Scan finished'))
   .catch(console.error)
-  // .finally(cleanUp)
+
+// .finally(cleanUp)
 
 
 async function cleanUp() {
