@@ -14,11 +14,11 @@ export default function Panel() {
     },
     {
       label: 'Balance',
-      data: <Balance value={account?.balance?.free}/>
+      data: <Balance value={account?.balance?.free || 0}/>
     },
     {
       label: 'Reputation',
-      data: account?.reputation
+      data: account?.reputation || 0
     },
   ]
 
