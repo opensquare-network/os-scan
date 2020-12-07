@@ -12,6 +12,7 @@ import bountiesReducer from './bountySlice'
 import bountyDetailReducer from './bountyDetailSlice'
 import accountDetailReducer from './accountDetailSlice'
 import accountsReducer from './accountSlice'
+import statisticReducer from './statisticSlice'
 
 export default combineReducers({
   test: testReducer,
@@ -27,4 +28,5 @@ export default combineReducers({
   bountyDetail: bountyDetailReducer,
   accountDetail: accountDetailReducer,
   accounts: accountsReducer,
+  statistics: statisticReducer,
 })

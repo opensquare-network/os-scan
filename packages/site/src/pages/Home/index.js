@@ -2,6 +2,7 @@ import React from "react";
 import LatestBlocks from "@pages/Home/LatestBlocks";
 import styled from "styled-components"
 import LatestImportantExtrinsics from "@pages/Home/LatestImportantExtrinsics";
+import Statistics from "@pages/Home/Statistics";
 
 const Wrapper = styled.div`
 `
@@ -13,10 +14,10 @@ const LatestInfo = styled.div`
 
   @media screen and (min-width: 930px) {
     display: flex;
-    
+
     & > div {
       flex: 1;
-      
+
       &:not(:first-of-type) {
         margin-left: 16px;
       }
@@ -27,6 +28,7 @@ const LatestInfo = styled.div`
 export default function Home() {
   return (
     <Wrapper>
+      <Statistics />
       <LatestInfo>
         <LatestBlocks />
         <LatestImportantExtrinsics />

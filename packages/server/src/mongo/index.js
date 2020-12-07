@@ -11,7 +11,8 @@ const bountyCollectionName = 'bounty'
 const bountyStateCollectionName = 'bountyState'
 const bountyHuntersCollectionName = 'bountyHunters'
 const accountCollectionName = 'account'
-const accountExtrinsicCollectionName = 'accountExtrinsic'
+const accountBalanceCollectionName = 'accountBalance'
+const accountReputationCollectionName = 'accountReputation'
 
 let client = null
 let db = null
@@ -24,7 +25,8 @@ let bountyCol = null
 let bountyStateCol = null
 let bountyHuntersCol = null
 let accountCol = null
-let accountExtrinsicCol = null
+let accountBalanceCol = null
+let accountReputationCol = null
 
 const mongoUrl = config.mongo.url || 'mongodb://localhost:27017'
 
@@ -43,7 +45,8 @@ async function initDb() {
   bountyStateCol = db.collection(bountyStateCollectionName)
   bountyHuntersCol = db.collection(bountyHuntersCollectionName)
   accountCol = db.collection(accountCollectionName)
-  accountExtrinsicCol = db.collection(accountExtrinsicCollectionName)
+  accountBalanceCol = db.collection(accountBalanceCollectionName)
+  accountReputationCol = db.collection(accountReputationCollectionName)
 
   await _createIndexes()
 }
@@ -54,7 +57,38 @@ async function _createIndexes() {
     process.exit(1)
   }
 
-  // TODO: create indexes for DB collections
+
+  blockCol.createIndex({ hash: 1 }, { unique: true })
+  blockCol.createIndex({ 'header.number': -1 })
+
+  extrinsicCol.createIndex({ hash: 1 }, { unique: true })
+  extrinsicCol.createIndex({ 'indexer.blockHeight': -1, 'indexer.index': -1 })
+  extrinsicCol.createIndex({ 'indexer.blockHash': 1, 'indexer.index': -1 })
+  extrinsicCol.createIndex({ 'connect.stakeholders': 1, 'indexer.blockHeight': -1, 'indexer.index': -1 }, { sparse: true })
+
+  eventCol.createIndex({ 'indexer.blockHeight': -1, sort: -1 }, { unique: true })
+  eventCol.createIndex({ extrinsicHash: 1, sort: -1 })
+
+  bountyCol.createIndex({ bountyId: 1 }, { unique: true })
+  bountyCol.createIndex({ 'indexer.blockHeight': -1 })
+  bountyCol.createIndex({ creator: 1, 'indexer.blockHeight': -1 })
+  bountyCol.createIndex({ 'hunters.hunters.accountId': 1 }, { sparse: true })
+  bountyCol.createIndex({ 'state.state': 1 }, { sparse: true })
+
+  bountyStateCol.createIndex({ bountyId: 1, 'indexer.blockHeight': -1, sort: -1 }, { unique: true })
+  bountyStateCol.createIndex({ 'indexer.blockHeight': -1 })
+
+  bountyHuntersCol.createIndex({ bountyId: 1, 'indexer.blockHeight': -1, sort: -1 }, { unique: true })
+  bountyHuntersCol.createIndex({ 'indexer.blockHeight': -1 })
+
+  accountCol.createIndex({ address: 1 }, { unique: true })
+  accountCol.createIndex({ 'indexer.blockHeight': -1 })
+
+  accountBalanceCol.createIndex({ address: 1, 'indexer.blockHeight': -1, sort: -1 }, { unique: true })
+  accountBalanceCol.createIndex({ 'indexer.blockHeight': -1 })
+
+  accountReputationCol.createIndex({ address: 1, 'indexer.blockHeight': -1, sort: -1 }, { unique: true })
+  accountReputationCol.createIndex({ 'indexer.blockHeight': -1 })
 }
 
 async function tryInit(col) {
@@ -103,9 +137,14 @@ async function getAccountCollection() {
   return accountCol
 }
 
-async function getAccountExtrinsicCollection() {
-  await tryInit(accountExtrinsicCol)
-  return accountExtrinsicCol
+async function getAccountBalanceCollection() {
+  await tryInit(accountBalanceCol)
+  return accountBalanceCol
+}
+
+async function getAccountReputationCollection() {
+  await tryInit(accountReputationCol)
+  return accountReputationCol
 }
 
 module.exports = {
@@ -118,5 +157,6 @@ module.exports = {
   getBountyStateCollection,
   getBountyHuntersCollection,
   getAccountCollection,
-  getAccountExtrinsicCollection,
+  getAccountBalanceCollection,
+  getAccountReputationCollection,
 }
