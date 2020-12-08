@@ -5,24 +5,15 @@ const {
 
 class BountyService {
 
-  async countAllBounties() {
-    const col = await getBountyCollection()
-    return await col.estimatedDocumentCount()
-  }
-
   async countBounties(query = {}) {
     const col = await getBountyCollection()
     return await col.countDocuments(query)
   }
 
-  getBounties(skip = 0, limit = 20) {
-    return this.findBounties({}, skip, limit)
-  }
-
   async findBounties(query = {}, skip = 0, limit = 20) {
     const col = await getBountyCollection()
     const bounties = await col
-      .find(query, { projection: { hunters: 0 } })
+      .find(query)
       .sort({ 'indexer.blockHeight': -1 })
       .skip(skip)
       .limit(limit)

@@ -18,7 +18,7 @@ async function handleReputationEvent(event, indexer, sort) {
 
 async function saveAccountReputation(address, indexer, sort) {
   const api = await getApi()
-  let reputation = await api.query.osReputation.behaviorScore(address);
+  let reputation = await api.query.osReputation.behaviorScore.at(indexer.blockHash, address);
 
   const accountReputationsCol = await getAccountReputationCollection()
   await accountReputationsCol.insertOne({
