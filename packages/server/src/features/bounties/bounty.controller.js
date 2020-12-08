@@ -10,8 +10,17 @@ class BountyController {
       return
     }
 
-    const bounties = await bountyService.getBounties(page * pageSize, pageSize)
-    const total = await bountyService.countAllBounties()
+    const { state } = ctx.query;
+
+    let query
+    if (state) {
+      query = { 'state.state': state }
+    } else {
+      query = {}
+    }
+
+    const bounties = await bountyService.findBounties(query, page * pageSize, pageSize)
+    const total = await bountyService.countBounties(query)
 
     ctx.body = {
       items: bounties,
