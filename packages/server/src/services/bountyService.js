@@ -39,13 +39,13 @@ class BountyService {
     return bounty.hunters.hunters
   }
 
-  async countBountiesByHunter(hunter) {
+  async countBountiesByHunter(hunter, cond = {}) {
     const bountyCol = await getBountyCollection()
-    const result = await bountyCol.countDocuments({ 'hunters.hunters.accountId': hunter })
+    const result = await bountyCol.countDocuments({ 'hunters.hunters.accountId': hunter, ...cond })
     return result
   }
 
-  async findBountiesByHunter(hunter, cond, skip = 0, limit = 20) {
+  async findBountiesByHunter(hunter, cond = {}, skip = 0, limit = 20) {
     const bountyCol = await getBountyCollection()
     const result = await bountyCol.aggregate([
       // Step 1: Find out bounties that includes the hunter

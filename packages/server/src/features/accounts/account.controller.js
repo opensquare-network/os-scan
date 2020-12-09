@@ -102,7 +102,7 @@ class AccountController {
       return
     }
 
-    const total = await bountyService.countBountiesByHunter(address)
+    const total = await bountyService.countBountiesByHunter(address, { 'state.state': 'Accepted' })
     const bounties = await bountyService.findBountiesByHunter(address, { 'state.state': 'Accepted' }, page * pageSize, pageSize)
 
     ctx.body = {
