@@ -26,8 +26,8 @@ export default function Panel() {
       data: extrinsic?.indexer?.index
     },
     {
-      label: 'Index',
-      data: extrinsic?.indexer?.index
+      label: 'hash',
+      data: extrinsic?.hash
     },
     {
       label: 'Sender',

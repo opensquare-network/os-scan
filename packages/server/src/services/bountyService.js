@@ -39,18 +39,21 @@ class BountyService {
     return bounty.hunters.hunters
   }
 
-  async countBountiesByHunter(hunter) {
+  async countBountiesByHunter(hunter, cond = {}) {
     const bountyCol = await getBountyCollection()
-    const result = await bountyCol.countDocuments({ 'hunters.hunters.accountId': hunter })
+    const result = await bountyCol.countDocuments({ 'hunters.hunters.accountId': hunter, ...cond })
     return result
   }
 
-  async findBountiesByHunter(hunter, skip = 0, limit = 20) {
+  async findBountiesByHunter(hunter, cond = {}, skip = 0, limit = 20) {
     const bountyCol = await getBountyCollection()
     const result = await bountyCol.aggregate([
       // Step 1: Find out bounties that includes the hunter
       {
-        $match: {'hunters.hunters.accountId': hunter}
+        $match: {
+          'hunters.hunters.accountId': hunter,
+          ...cond
+        }
       },
       // Step 2: Pick hunter information we care about
       {
@@ -78,6 +81,35 @@ class BountyService {
       }, {
         $limit: limit
       }]).toArray()
+
+    return result
+  }
+
+  async countBountiesByAssignee(hunter, cond = {}) {
+    const bountyCol = await getBountyCollection()
+    const result = await bountyCol.countDocuments({ 'hunters.assignee.accountId': hunter, ...cond })
+    return result
+  }
+
+  async findBountiesByAssignee(hunter, cond = {}, skip = 0, limit = 20) {
+    const bountyCol = await getBountyCollection()
+    const query = [
+      // Step 1: Find out bounties that includes the hunter
+      {
+        $match: {
+          'hunters.assignee.accountId': hunter,
+          ...cond
+        }
+      },
+      // Step 2: sort and return data
+      {
+        $sort: { 'state.indexer.blockHeight': -1 }
+      }, {
+        $skip: skip
+      }, {
+        $limit: limit
+      }]
+    const result = await bountyCol.aggregate(query).toArray()
 
     return result
   }

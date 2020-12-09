@@ -1,13 +1,7 @@
 const {
-  getEventCollection,
   getExtrinsicCollection,
 } = require("../../mongo");
-const { isNum } = require("../../utils");
-const { isMongoId } = require("../../utils");
-const { ensure0xPrefix } = require("../../utils");
-const { isHash } = require("../../utils");
 const { extractPage } = require("../../utils");
-const { ObjectID } = require('mongodb')
 const bountyService = require("../../services/bountyService");
 const accountService = require("../../services/accountService");
 
@@ -48,7 +42,7 @@ class AccountController {
     }
 
     const col = await getExtrinsicCollection()
-    const total = await col.countDocuments({ signer: address })
+    const total = await col.countDocuments({ 'connect.stakeholders': address })
     const extrinsics = await col
       .find({ 'connect.stakeholders': address })
       .sort({ 'indexer.blockHeight': -1 })
@@ -90,10 +84,81 @@ class AccountController {
     }
 
     const total = await bountyService.countBountiesByHunter(address)
-    const bounties = await bountyService.findBountiesByHunter(address, page * pageSize, pageSize)
+    const bounties = await bountyService.findBountiesByHunter(address, {}, page * pageSize, pageSize)
 
     ctx.body = {
       items: bounties,
+      page,
+      pageSize,
+      total
+    }
+  }
+
+  async getApplyingBounties(ctx) {
+    const { address } = ctx.params
+    const { page, pageSize } = extractPage(ctx)
+    if (pageSize === 0) {
+      ctx.status = 400
+      return
+    }
+
+    const total = await bountyService.countBountiesByHunter(address, { 'state.state': 'Accepted' })
+    const bounties = await bountyService.findBountiesByHunter(address, { 'state.state': 'Accepted' }, page * pageSize, pageSize)
+
+    ctx.body = {
+      items: bounties,
+      page,
+      pageSize,
+      total
+    }
+  }
+
+  async getAssignedBounties(ctx) {
+    const { address } = ctx.params
+    const { page, pageSize } = extractPage(ctx)
+    if (pageSize === 0) {
+      ctx.status = 400
+      return
+    }
+
+    const total = await bountyService.countBountiesByAssignee(address,
+      {
+        'state.state': {
+          $in: ['Assigned', 'Submitted']
+        }
+      })
+    const bounties = await bountyService.findBountiesByAssignee(address,
+      {
+        'state.state': {
+          $in: ['Assigned', 'Submitted']
+        }
+      }, page * pageSize, pageSize)
+
+    ctx.body = {
+      items: bounties,
+      page,
+      pageSize,
+      total
+    }
+  }
+
+  async getBehaviors(ctx) {
+    const { address } = ctx.params
+    const { page, pageSize } = extractPage(ctx)
+    if (pageSize === 0) {
+      ctx.status = 400
+      return
+    }
+
+    const col = await getExtrinsicCollection()
+    const total = await col.countDocuments({ signer: address })
+    const extrinsics = await col
+      .find({ signer: address })
+      .sort({ 'indexer.blockHeight': -1 })
+      .toArray()
+
+    ctx.body = {
+      items: extrinsics,
       page,
       pageSize,
       total
