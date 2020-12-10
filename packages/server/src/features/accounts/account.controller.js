@@ -75,6 +75,44 @@ class AccountController {
     }
   }
 
+  async getExaminedBounties(ctx) {
+    const { address } = ctx.params
+    const { page, pageSize } = extractPage(ctx)
+    if (pageSize === 0) {
+      ctx.status = 400
+      return
+    }
+
+    const total = await bountyService.countBounties({ creator: address, 'state.state': { $ne: 'Applying' } })
+    const bounties = await bountyService.findBounties({ creator: address, 'state.state': { $ne: 'Applying' } }, page * pageSize, pageSize)
+
+    ctx.body = {
+      items: bounties,
+      page,
+      pageSize,
+      total
+    }
+  }
+
+  async getPendingApproveBounties(ctx) {
+    const { address } = ctx.params
+    const { page, pageSize } = extractPage(ctx)
+    if (pageSize === 0) {
+      ctx.status = 400
+      return
+    }
+
+    const total = await bountyService.countBounties({ creator: address, 'state.state': 'Applying' })
+    const bounties = await bountyService.findBounties({ creator: address, 'state.state': 'Applying' }, page * pageSize, pageSize)
+
+    ctx.body = {
+      items: bounties,
+      page,
+      pageSize,
+      total
+    }
+  }
+
   async getHuntBounties(ctx) {
     const { address } = ctx.params
     const { page, pageSize } = extractPage(ctx)
@@ -124,13 +162,13 @@ class AccountController {
     const total = await bountyService.countBountiesByAssignee(address,
       {
         'state.state': {
-          $in: ['Assigned', 'Submitted']
+          $ne: 'Accepted'
         }
       })
     const bounties = await bountyService.findBountiesByAssignee(address,
       {
         'state.state': {
-          $in: ['Assigned', 'Submitted']
+          $ne: 'Accepted'
         }
       }, page * pageSize, pageSize)
 
