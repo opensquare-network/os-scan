@@ -77,6 +77,12 @@ class AccountController {
     }
   }
 
+  async getExaminedBountiesCount(ctx) {
+    const { address } = ctx.params
+    const total = await bountyService.countBounties({ creator: address, 'state.state': { $ne: 'Applying' } })
+    ctx.body = total
+  }
+
   async getExaminedBounties(ctx) {
     const { address } = ctx.params
     const { page, pageSize } = extractPage(ctx)
@@ -94,6 +100,12 @@ class AccountController {
       pageSize,
       total
     }
+  }
+
+  async getPendingApproveBountiesCount(ctx) {
+    const { address } = ctx.params
+    const total = await bountyService.countBounties({ creator: address, 'state.state': 'Applying' })
+    ctx.body = total
   }
 
   async getPendingApproveBounties(ctx) {
@@ -115,6 +127,12 @@ class AccountController {
     }
   }
 
+  async getHuntBountiesCount(ctx) {
+    const { address } = ctx.params
+    const total = await bountyService.countBountiesByHunter(address)
+    ctx.body = total
+  }
+
   async getHuntBounties(ctx) {
     const { address } = ctx.params
     const { page, pageSize } = extractPage(ctx)
@@ -134,6 +152,12 @@ class AccountController {
     }
   }
 
+  async getApplyingBountiesCount(ctx) {
+    const { address } = ctx.params
+    const total = await bountyService.countBountiesByHunter(address, { 'state.state': 'Accepted' })
+    ctx.body = total
+  }
+
   async getApplyingBounties(ctx) {
     const { address } = ctx.params
     const { page, pageSize } = extractPage(ctx)
@@ -151,6 +175,17 @@ class AccountController {
       pageSize,
       total
     }
+  }
+
+  async getAssignedBountiesCount(ctx) {
+    const { address } = ctx.params
+    const total = await bountyService.countBountiesByAssignee(address,
+      {
+        'state.state': {
+          $ne: 'Accepted'
+        }
+      })
+    ctx.body = total
   }
 
   async getAssignedBounties(ctx) {
@@ -180,6 +215,13 @@ class AccountController {
       pageSize,
       total
     }
+  }
+
+  async getBehaviorsCount(ctx) {
+    const { address } = ctx.params
+    const col = await getExtrinsicCollection()
+    const total = await col.countDocuments({ signer: address })
+    ctx.body = total
   }
 
   async getBehaviors(ctx) {
