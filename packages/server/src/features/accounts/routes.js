@@ -10,5 +10,7 @@ router.get('/accounts/:address/huntbounties', accountController.getHuntBounties)
 router.get('/accounts/:address/applyingbounties', accountController.getApplyingBounties)
 router.get('/accounts/:address/assignedbounties', accountController.getAssignedBounties)
 router.get('/accounts/:address/behaviors', accountController.getBehaviors)
+router.get('/accounts/:address/pendingapprove', accountController.getPendingApproveBounties)
+router.get('/accounts/:address/examinedbounties', accountController.getExaminedBounties)
 
 module.exports = router
