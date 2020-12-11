@@ -46,6 +46,8 @@ class AccountController {
     const extrinsics = await col
       .find({ 'connect.stakeholders': address })
       .sort({ 'indexer.blockHeight': -1 })
+      .skip(page * pageSize)
+      .limit(pageSize)
       .toArray()
 
     ctx.body = {
@@ -193,6 +195,8 @@ class AccountController {
     const extrinsics = await col
       .find({ signer: address })
       .sort({ 'indexer.blockHeight': -1 })
+      .skip(page * pageSize)
+      .limit(pageSize)
       .toArray()
 
     ctx.body = {
