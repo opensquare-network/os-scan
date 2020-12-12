@@ -39,7 +39,7 @@ module.exports = {
     "owner": "AccountId",
     "currency_id": "CurrencyId",
     "payment": "Balance",
-    "title": "Vec<u8>",
+    "title": "Text",
     "digest": "SdDigest"
   },
   "Bounty": {
