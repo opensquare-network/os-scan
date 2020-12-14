@@ -11,12 +11,15 @@ import ExtrinsicLink from "@components/ExtrinsicLink";
 import DateShow from "@components/DateShow";
 import BlockLink from "@components/BlockLink";
 import { AddressLink, ExtrinsicAction } from "@components/index";
+import Success from "@components/Success";
+import Fail from "@components/Fail";
 
 const columns = [
   { title: 'Block Height', dataIndex: 'height', },
   { title: 'Extrinsic Hash', dataIndex: 'hash' },
   { title: 'Signer', dataIndex: 'signer' },
   { title: 'Action', dataIndex: 'action' },
+  { title: 'Result', dataIndex: 'result' },
 ]
 
 export default function Extrinsics() {
@@ -35,7 +38,7 @@ export default function Extrinsics() {
   const loading = useSelector(fetchAccountExtrinsicsLoadingSelector)
 
   const dataSource = (extrinsics || []).map(extrinsic => {
-    const { hash, indexer, section, signer, name, args } = extrinsic
+    const { hash, indexer, section, signer, name, args, isSuccess } = extrinsic
 
     return {
       hash: <ExtrinsicLink value={hash} truncate={true} />,
@@ -44,6 +47,7 @@ export default function Extrinsics() {
       height: <BlockLink value={indexer.blockHeight} />,
       signer: <AddressLink addr={signer} truncate={true} allowLinkToSelf={false} />,
       action: <ExtrinsicAction section={section} name={name} />,
+      result: isSuccess ? <Success /> : <Fail />,
       args,
       key: hash
     }
