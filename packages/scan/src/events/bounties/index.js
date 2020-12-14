@@ -19,6 +19,7 @@ function isStateChange(method) {
     'Submit',
     'Resign',
     'Resolve',
+    'HunterRemark',
   ].includes(method)
 }
 
@@ -67,15 +68,21 @@ async function saveNewBounty(json, indexer) {
 async function saveBountyState(method, json, indexer, sort) {
   const bountyId = json['ApplyBounty' === method ? 1 : 0]
 
-  const api = await getApi()
-  const state = await api.query.osBounties.bountyStateOf.at(indexer.blockHash, bountyId)
+  let state
+  if (method === 'HunterRemark') {
+    state = 'Remarked'
+  } else {
+    const api = await getApi()
+    state = await api.query.osBounties.bountyStateOf.at(indexer.blockHash, bountyId)
+    state = state.toJSON()
+  }
 
   const bountyStateCol = await getBountyStateCollection()
   await bountyStateCol.insertOne({
     indexer,
     sort,
     bountyId,
-    state: state.toJSON(),
+    state,
     data: json
   })
 
@@ -86,7 +93,7 @@ async function saveBountyState(method, json, indexer, sort) {
       state: {
         indexer,
         sort,
-        state: state.toJSON(),
+        state,
         data: json
       }
     }
