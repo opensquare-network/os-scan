@@ -33,10 +33,31 @@ export default function BountyDetailPanel() {
     },
     state: {
       state
-    }
+    },
+    hunters,
   } = bounty || {
     meta: { V1: {} },
     state: {}
+  }
+
+  const {
+    funderRemark,
+    hunterRemark,
+  } = hunters || {}
+
+  const additionalData = []
+  if (funderRemark) {
+    additionalData.push({
+      label: 'Funder remark',
+      data: funderRemark.remark
+    })
+  }
+
+  if (hunterRemark) {
+    additionalData.push({
+      label: 'Hunter remark',
+      data: hunterRemark.remark
+    })
   }
 
   useEffect(() => {
@@ -63,10 +84,6 @@ export default function BountyDetailPanel() {
       data: currency
     },
     {
-      label: 'Currency',
-      data: currency
-    },
-    {
       label: 'Amount',
       data: amount
     },
@@ -78,6 +95,7 @@ export default function BountyDetailPanel() {
       label: 'Content Digest',
       data: digest
     },
+    ...additionalData,
     {
       label: 'Content Detail',
       data: <Content><ReactMarkdown>{content?.content || 'No data'}</ReactMarkdown></Content>,
