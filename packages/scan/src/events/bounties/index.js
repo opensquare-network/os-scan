@@ -2,6 +2,8 @@ const { handleCancelHuntBounty } = require("./bountyHunters");
 const { handleHuntBounty } = require("./bountyHunters");
 const { handleAssignBounty } = require("./bountyHunters");
 const { handleResign } = require("./bountyHunters");
+const { handleFunderRemark } = require("./bountyHunters");
+const { handleHunterRemark } = require("./bountyHunters");
 const { safeBlocks } = require("../../utils/consants");
 const { getBountyStateCollection } = require("../../mongo");
 const { getApi } = require("../../api");
@@ -18,8 +20,7 @@ function isStateChange(method) {
     'AssignBounty',
     'Submit',
     'Resign',
-    'Resolve',
-    'HunterRemark',
+    'Resolve'
   ].includes(method)
 }
 
@@ -42,6 +43,10 @@ async function handleBountiesEvent(event, indexer, eventSort) {
     await handleAssignBounty(jsonData, indexer, eventSort)
   } else if ('Resign' === method) {
     await handleResign(jsonData, indexer, eventSort)
+  } else if ('FunderRemark' === method) {
+    await handleFunderRemark(jsonData, indexer, eventSort)
+  } else if ('HunterRemark' === method) {
+    await handleHunterRemark(jsonData, indexer, eventSort)
   }
 
   if (isStateChange(method)) {
@@ -68,14 +73,9 @@ async function saveNewBounty(json, indexer) {
 async function saveBountyState(method, json, indexer, sort) {
   const bountyId = json['ApplyBounty' === method ? 1 : 0]
 
-  let state
-  if (method === 'HunterRemark') {
-    state = 'Remarked'
-  } else {
-    const api = await getApi()
-    state = await api.query.osBounties.bountyStateOf.at(indexer.blockHash, bountyId)
-    state = state.toJSON()
-  }
+  const api = await getApi()
+  let state = await api.query.osBounties.bountyStateOf.at(indexer.blockHash, bountyId)
+  state = state.toJSON()
 
   const bountyStateCol = await getBountyStateCollection()
   await bountyStateCol.insertOne({
