@@ -1,16 +1,17 @@
 import { useParams } from "react-router";
-import { useDispatch } from "react-redux";
 import React, { useEffect } from "react";
-import { fetchEvent } from "@store/reducers/eventDetailSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchEvent, eventDetailSelector } from "@store/reducers/eventDetailSlice";
 import Breadcrumb from "@components/Breadcrumb";
 import styled from "styled-components";
 import Panel from "@pages/EventDetail/Panel";
+import ObjectMissing from "@components/ObjectMissing";
 
 const Wrapper = styled.div`
   nav {
     margin-bottom: 24px;
   }
-  
+
   & > div {
     margin-top: 24px;
   }
@@ -27,6 +28,8 @@ export default function EventDetail() {
     }
   }, [dispatch, id])
 
+  const event = useSelector(eventDetailSelector)
+
   const breadcrumb = (
     <Breadcrumb
       dataSource={[
@@ -35,6 +38,10 @@ export default function EventDetail() {
       ]}
     />
   )
+
+  if (!event) {
+    return <ObjectMissing>No Data</ObjectMissing>
+  }
 
   return (
     <Wrapper>

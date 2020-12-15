@@ -8,12 +8,12 @@ import 'semantic-ui-css/semantic.min.css';
 import 'antd/dist/antd.css'
 
 ReactDOM.render(
-  <React.StrictMode>
+  <React.Fragment>
     <GlobalStyle />
     <Provider store={store}>
       <App />
     </Provider>
-  </React.StrictMode>,
+  </React.Fragment>,
   document.getElementById('root')
 );
 
