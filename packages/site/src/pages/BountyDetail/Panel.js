@@ -7,6 +7,8 @@ import PanelList from "@components/PanelList";
 import { AddressLink } from "@components";
 import ReactMarkdown from 'react-markdown';
 import styled from "styled-components";
+import toPrecision from "../../utils/toPrecision";
+import getPrecision from "./precision";
 
 const Content = styled.div`
   padding: 1em;
@@ -85,7 +87,7 @@ export default function BountyDetailPanel() {
     },
     {
       label: 'Amount',
-      data: amount
+      data: toPrecision(amount, getPrecision(currency))
     },
     {
       label: 'Title',
