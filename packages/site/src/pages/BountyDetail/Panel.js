@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchBountyContent } from "@store/reducers/bountyDetailSlice";
 import PanelList from "@components/PanelList";
-import { AddressLink } from "@components/index";
+import { AddressLink } from "@components";
 import ReactMarkdown from 'react-markdown';
 import styled from "styled-components";
 

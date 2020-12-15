@@ -10,7 +10,7 @@ import Table from "antd/lib/table";
 import ExtrinsicLink from "@components/ExtrinsicLink";
 import DateShow from "@components/DateShow";
 import BlockLink from "@components/BlockLink";
-import { AddressLink, ExtrinsicAction } from "@components/index";
+import { AddressLink, ExtrinsicAction } from "@components";
 import Success from "@components/Success";
 import Fail from "@components/Fail";
 
