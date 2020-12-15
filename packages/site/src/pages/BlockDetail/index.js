@@ -3,10 +3,11 @@ import Spinner from "@components/Spinner";
 import Breadcrumb from "@components/Breadcrumb";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchBlock, fetchBlockLoadingSelector } from "@store/reducers/blockDetailSlice";
+import { fetchBlock, fetchBlockLoadingSelector, blockDetailSelector } from "@store/reducers/blockDetailSlice";
 import Panel from "@pages/BlockDetail/Panel";
 import ExtrinsicsAndEvents from "@pages/BlockDetail/ExtrinsicsAndEvents";
 import DetailWrapper from "@components/DetailWrapper";
+import ObjectMissing from "@components/ObjectMissing";
 
 export default function BlockDetail() {
   const { heightOrHash } = useParams()
@@ -19,6 +20,7 @@ export default function BlockDetail() {
   }, [dispatch, heightOrHash])
 
   const loading = useSelector(fetchBlockLoadingSelector)
+  const block = useSelector(blockDetailSelector)
 
   const breadcrumb = (
     <Breadcrumb
@@ -38,6 +40,10 @@ export default function BlockDetail() {
         </div>
       </>
     )
+  }
+
+  if (!block) {
+    return <ObjectMissing>No Data</ObjectMissing>
   }
 
   return (

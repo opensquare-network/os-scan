@@ -2,18 +2,19 @@ import styled from "styled-components";
 import React, { useEffect } from "react";
 import Breadcrumb from "@components/Breadcrumb";
 import { useParams } from "react-router";
-import { useDispatch } from "react-redux";
-import { fetchExtrinsic } from "@store/reducers/extrinsicDetailSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchExtrinsic, extrinsicDetailSelector } from "@store/reducers/extrinsicDetailSlice";
 import Panel from "@pages/ExtrinsicDetail/Panel";
 import Events from "@pages/ExtrinsicDetail/Events";
 import Box from "@components/Box";
 import Nav from "@pages/ExtrinsicDetail/Nav";
+import ObjectMissing from "@components/ObjectMissing";
 
 const Wrapper = styled.div`
   nav {
     margin-bottom: 24px;
   }
-  
+
   & > div {
     margin-top: 24px;
   }
@@ -29,6 +30,8 @@ export default function ExtrinsicDetail() {
     }
   }, [dispatch, hash])
 
+  const extrinsic = useSelector(extrinsicDetailSelector)
+
   const breadcrumb = (
     <Breadcrumb
       dataSource={[
@@ -37,6 +40,10 @@ export default function ExtrinsicDetail() {
       ]}
     />
   )
+
+  if (!extrinsic) {
+    return <ObjectMissing>No Data</ObjectMissing>
+  }
 
   return (
     <Wrapper>
