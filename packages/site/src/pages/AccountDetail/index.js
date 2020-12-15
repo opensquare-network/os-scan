@@ -7,6 +7,13 @@ import Breadcrumb from "@components/Breadcrumb";
 import AccountDetailPanel from "@pages/AccountDetail/Panel";
 import ExtrinsicsAndFundAndHunt from "@pages/AccountDetail/ExtrinsicsAndFundAndHunt";
 import ObjectMissing from "@components/ObjectMissing";
+import styled from "styled-components"
+
+const EmptyDetailWrapper = styled(DetailWrapper)`
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+`
 
 export default function AccountDetail() {
   const { address } = useParams()
@@ -30,7 +37,12 @@ export default function AccountDetail() {
   )
 
   if (!account) {
-    return <ObjectMissing>No Data</ObjectMissing>
+    return (
+      <EmptyDetailWrapper>
+        {breadcrumb}
+        <ObjectMissing>No Data</ObjectMissing>
+      </EmptyDetailWrapper>
+    )
   }
 
   return (

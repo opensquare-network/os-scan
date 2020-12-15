@@ -8,6 +8,13 @@ import Panel from "@pages/BlockDetail/Panel";
 import ExtrinsicsAndEvents from "@pages/BlockDetail/ExtrinsicsAndEvents";
 import DetailWrapper from "@components/DetailWrapper";
 import ObjectMissing from "@components/ObjectMissing";
+import styled from "styled-components"
+
+const EmptyDetailWrapper = styled(DetailWrapper)`
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+`
 
 export default function BlockDetail() {
   const { heightOrHash } = useParams()
@@ -43,7 +50,12 @@ export default function BlockDetail() {
   }
 
   if (!block) {
-    return <ObjectMissing>No Data</ObjectMissing>
+    return (
+      <EmptyDetailWrapper>
+        {breadcrumb}
+        <ObjectMissing>No Data</ObjectMissing>
+      </EmptyDetailWrapper>
+    )
   }
 
   return (

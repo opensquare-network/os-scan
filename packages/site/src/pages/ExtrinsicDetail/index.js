@@ -20,6 +20,12 @@ const Wrapper = styled.div`
   }
 `
 
+const EmptyDetailWrapper = styled(Wrapper)`
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+`
+
 export default function ExtrinsicDetail() {
   const { hash } = useParams()
   const dispatch = useDispatch()
@@ -42,7 +48,12 @@ export default function ExtrinsicDetail() {
   )
 
   if (!extrinsic) {
-    return <ObjectMissing>No Data</ObjectMissing>
+    return (
+      <EmptyDetailWrapper>
+        {breadcrumb}
+        <ObjectMissing>No Data</ObjectMissing>
+      </EmptyDetailWrapper>
+    )
   }
 
   return (
