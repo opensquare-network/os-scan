@@ -5,5 +5,15 @@
   "workspaces": [
     "packages/*"
   ],
-  "license": "Apache 2.0"
+  "license": "Apache 2.0",
+  "devDependencies": {
+    "husky": "^4.3.6",
+    "prettier": "^2.2.1",
+    "pretty-quick": "^3.1.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  }
 }
