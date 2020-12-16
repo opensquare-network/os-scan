@@ -9,6 +9,13 @@ import Box from "@components/Box";
 import Nav from "@pages/BountyDetail/Nav";
 import Hunters from "@pages/BountyDetail/Hunters";
 import ObjectMissing from "@components/ObjectMissing";
+import styled from "styled-components"
+
+const EmptyDetailWrapper = styled(DetailWrapper)`
+  display: flex;
+  flex-flow: column;
+  flex: 1;
+`
 
 export default function BountyDetail() {
   const { bountyId } = useParams()
@@ -32,7 +39,12 @@ export default function BountyDetail() {
   )
 
   if (!bounty) {
-    return <ObjectMissing>No Data</ObjectMissing>
+    return (
+      <EmptyDetailWrapper>
+        {breadcrumb}
+        <ObjectMissing>No Data</ObjectMissing>
+      </EmptyDetailWrapper>
+    )
   }
 
   return (
