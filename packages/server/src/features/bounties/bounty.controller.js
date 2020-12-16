@@ -30,6 +30,30 @@ class BountyController {
     }
   }
 
+  async getHuntableBounties(ctx) {
+    const { page, pageSize } = extractPage(ctx)
+    if (pageSize === 0 || page < 0) {
+      ctx.status = 400
+      return
+    }
+
+    const query = {
+      'state.state': {
+        $in: ['Accepted', 'Assigned', 'Submitted']
+      }
+    }
+
+    const bounties = await bountyService.findBounties(query, page * pageSize, pageSize)
+    const total = await bountyService.countBounties(query)
+
+    ctx.body = {
+      items: bounties,
+      page,
+      pageSize,
+      total
+    }
+  }
+
   async getBounty(ctx) {
     const { bountyId = '' } = ctx.params
 
