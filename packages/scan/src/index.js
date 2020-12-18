@@ -1,3 +1,4 @@
+require('dotenv').config()
 const { initGenesisData } = require("./genesis");
 const { handleExtrinsics } = require("./extrinsic");
 const { handleEvents } = require("./events");
