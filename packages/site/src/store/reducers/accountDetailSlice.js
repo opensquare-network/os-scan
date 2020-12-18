@@ -92,6 +92,7 @@ export const fetchHuntBounties = (address, page=0, pageSize=20) => async dispatc
   }
 }
 
+export const accountDetailLoadingSelector = state => state.accountDetail.loading
 export const accountDetailSelector = state => state.accountDetail.account
 export const accountExtrinsicSelector = state => state.accountDetail.extrinsics
 export const fetchAccountExtrinsicsLoadingSelector = state => state.accountDetail.loadingExtrinsics

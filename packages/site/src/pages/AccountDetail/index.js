@@ -2,12 +2,13 @@ import DetailWrapper from "@components/DetailWrapper";
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAccount, accountDetailSelector } from "@store/reducers/accountDetailSlice";
+import { fetchAccount, accountDetailSelector, accountDetailLoadingSelector } from "@store/reducers/accountDetailSlice";
 import Breadcrumb from "@components/Breadcrumb";
 import AccountDetailPanel from "@pages/AccountDetail/Panel";
 import ExtrinsicsAndFundAndHunt from "@pages/AccountDetail/ExtrinsicsAndFundAndHunt";
 import ObjectMissing from "@components/ObjectMissing";
 import styled from "styled-components"
+import CommonDetailLoading from "@components/CommonDetailLoading";
 
 const EmptyDetailWrapper = styled(DetailWrapper)`
   display: flex;
@@ -26,6 +27,7 @@ export default function AccountDetail() {
   }, [dispatch, address])
 
   const account = useSelector(accountDetailSelector)
+  const loading = useSelector(accountDetailLoadingSelector)
 
   const breadcrumb = (
     <Breadcrumb
@@ -35,6 +37,10 @@ export default function AccountDetail() {
       ]}
     />
   )
+
+  if (loading) {
+    return <CommonDetailLoading breadcrumb={breadcrumb} />
+  }
 
   if (!account) {
     return (
