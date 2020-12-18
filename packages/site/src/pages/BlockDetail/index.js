@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
-import Spinner from "@components/Spinner";
 import Breadcrumb from "@components/Breadcrumb";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchBlock, fetchBlockLoadingSelector, blockDetailSelector } from "@store/reducers/blockDetailSlice";
+import { blockDetailSelector, fetchBlock, fetchBlockLoadingSelector } from "@store/reducers/blockDetailSlice";
 import Panel from "@pages/BlockDetail/Panel";
 import ExtrinsicsAndEvents from "@pages/BlockDetail/ExtrinsicsAndEvents";
 import DetailWrapper from "@components/DetailWrapper";
 import ObjectMissing from "@components/ObjectMissing";
 import styled from "styled-components"
+import CommonDetailLoading from "@components/CommonDetailLoading";
 
 const EmptyDetailWrapper = styled(DetailWrapper)`
   display: flex;
@@ -39,14 +39,7 @@ export default function BlockDetail() {
   )
 
   if (loading) {
-    return (
-      <>
-        {breadcrumb}
-        <div style={{ padding: '10%' }}>
-          <Spinner />
-        </div>
-      </>
-    )
+    return <CommonDetailLoading breadcrumb={breadcrumb} />
   }
 
   if (!block) {

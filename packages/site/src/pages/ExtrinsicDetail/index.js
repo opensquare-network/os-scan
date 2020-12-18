@@ -3,12 +3,17 @@ import React, { useEffect } from "react";
 import Breadcrumb from "@components/Breadcrumb";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchExtrinsic, extrinsicDetailSelector } from "@store/reducers/extrinsicDetailSlice";
+import {
+  extrinsicDetailLoadingSelector,
+  extrinsicDetailSelector,
+  fetchExtrinsic
+} from "@store/reducers/extrinsicDetailSlice";
 import Panel from "@pages/ExtrinsicDetail/Panel";
 import Events from "@pages/ExtrinsicDetail/Events";
 import Box from "@components/Box";
 import Nav from "@pages/ExtrinsicDetail/Nav";
 import ObjectMissing from "@components/ObjectMissing";
+import CommonDetailLoading from "@components/CommonDetailLoading";
 
 const Wrapper = styled.div`
   nav {
@@ -37,6 +42,7 @@ export default function ExtrinsicDetail() {
   }, [dispatch, hash])
 
   const extrinsic = useSelector(extrinsicDetailSelector)
+  const loading = useSelector(extrinsicDetailLoadingSelector)
 
   const breadcrumb = (
     <Breadcrumb
@@ -46,6 +52,10 @@ export default function ExtrinsicDetail() {
       ]}
     />
   )
+
+  if (loading) {
+    return <CommonDetailLoading breadcrumb={breadcrumb} />
+  }
 
   if (!extrinsic) {
     return (
@@ -61,7 +71,7 @@ export default function ExtrinsicDetail() {
       {breadcrumb}
       <Panel />
       <Box>
-        <Nav/>
+        <Nav />
         <Events />
       </Box>
     </Wrapper>

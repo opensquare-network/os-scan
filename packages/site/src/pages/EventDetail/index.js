@@ -1,11 +1,12 @@
 import { useParams } from "react-router";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchEvent, eventDetailSelector } from "@store/reducers/eventDetailSlice";
+import { eventDetailLoadingSelector, eventDetailSelector, fetchEvent } from "@store/reducers/eventDetailSlice";
 import Breadcrumb from "@components/Breadcrumb";
 import styled from "styled-components";
 import Panel from "@pages/EventDetail/Panel";
 import ObjectMissing from "@components/ObjectMissing";
+import CommonDetailLoading from "@components/CommonDetailLoading";
 
 const Wrapper = styled.div`
   nav {
@@ -27,15 +28,14 @@ const EmptyDetailWrapper = styled(Wrapper)`
 export default function EventDetail() {
   const { id } = useParams()
   const dispatch = useDispatch()
-  console.log('id', id)
+  const loading = useSelector(eventDetailLoadingSelector)
+  const event = useSelector(eventDetailSelector)
 
   useEffect(() => {
     if (id) {
       dispatch(fetchEvent(id))
     }
   }, [dispatch, id])
-
-  const event = useSelector(eventDetailSelector)
 
   const breadcrumb = (
     <Breadcrumb
@@ -45,6 +45,10 @@ export default function EventDetail() {
       ]}
     />
   )
+
+  if (loading) {
+    return <CommonDetailLoading breadcrumb={breadcrumb} />
+  }
 
   if (!event) {
     return (

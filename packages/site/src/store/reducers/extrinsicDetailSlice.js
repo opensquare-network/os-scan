@@ -53,6 +53,7 @@ export const fetchExtrinsicEvents = hash => async dispatch => {
   }
 }
 
+export const extrinsicDetailLoadingSelector = state => state.extrinsicDetail.loading
 export const extrinsicEventSelector = state => state.extrinsicDetail.events
 export const extrinsicEventsLoadingSelector = state => state.extrinsicDetail.loadingEvents
 export const extrinsicDetailSelector = state => state.extrinsicDetail.extrinsic
