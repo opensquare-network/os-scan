@@ -4,7 +4,7 @@ import { setLatestBlocks } from "@store/reducers/latestBlockSlice";
 import { setLatestExtrinsics } from "@store/reducers/latestExtrinsicSlice";
 import { setLatestStatistics } from "@store/reducers/statisticSlice";
 
-const socket = io(process.env.REACT_APP_SERVER)
+const socket = io(process.env.REACT_APP_SOCKET_IO_URL)
 socket.connect()
 socket.on('connect', () => {
   socket.emit('subscribe', 'LATEST_BLOCKS_ROOM')
